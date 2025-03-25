@@ -25,4 +25,5 @@ public class Bakery {
     private String link;
     private String mapx;
     private String mapy;
+    private String description;
 }

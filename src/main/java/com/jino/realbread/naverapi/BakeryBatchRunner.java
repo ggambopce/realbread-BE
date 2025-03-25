@@ -15,7 +15,7 @@ public class BakeryBatchRunner {
 
     @PostConstruct // 또는 스케줄링용 @Scheduled(fixedRate = ...)
     public void run() {
-        List<String> dongs = List.of(
+        List<String> bakeryNames = List.of(
                 // 유성구
                 "궁동", "구암동", "덕명동", "덕진동", "도룡동", "봉명동", "상대동", "성북동", "신동", "신성동",
                 "어은동", "외삼동", "원내동", "원신흥동", "자운동", "장대동", "전민동", "계산동", "하기동", "학하동",
@@ -35,10 +35,9 @@ public class BakeryBatchRunner {
                 // 대덕구
                 "법동", "비래동", "석봉동", "신대동", "신일동", "오정동", "와동", "읍내동", "중리동", "회덕동"
         );
-        List<String> keywords = List.of("빵집", "베이커리");
 
-        List<String> queries = dongs.stream()
-                .flatMap(d -> keywords.stream().map(k -> "대전 " + d + " " + k))
+        List<String> queries = bakeryNames.stream()
+                .map(name -> "대전 " + name + " 최신 빵집")
                 .collect(Collectors.toList());
 
         for (String query : queries) {

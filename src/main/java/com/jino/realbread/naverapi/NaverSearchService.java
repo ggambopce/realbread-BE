@@ -31,7 +31,7 @@ public class NaverSearchService {
             String encoded = URLEncoder.encode(query, StandardCharsets.UTF_8);
             ObjectMapper objectMapper = new ObjectMapper();
 
-            String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + encoded +"&display=50&start=1&sort=random";
+            String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + encoded +"&display=5&start=1&sort=comment";
 
             HttpURLConnection con = (HttpURLConnection) new URL(apiURL).openConnection();
             con.setRequestMethod("GET");

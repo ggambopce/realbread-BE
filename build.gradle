@@ -37,6 +37,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+	// 동정 크롤링
+	implementation 'org.seleniumhq.selenium:selenium-java:4.17.0'
+	implementation 'io.github.bonigarcia:webdrivermanager:5.5.1'
+
 	//Querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"

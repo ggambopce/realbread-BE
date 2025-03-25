@@ -26,3 +26,8 @@ spring:
     cache: false                    # 개발 중에는 캐싱 비활성화
     encoding: UTF-8                 # 인코딩 설정
 
+naver:
+  client:
+    id: WlcRMCsyTaeaWCl8CNsq
+    secret: EsJP3vBRFM
+

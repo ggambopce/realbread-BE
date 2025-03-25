@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NaverSearchService {
 
-    BakeryRepository bakeryRepository;
+    private final BakeryRepository bakeryRepository;
 
     @Value("${naver.client.id}")
     private String clientId;
@@ -29,34 +29,42 @@ public class NaverSearchService {
     public void searchAndSave(String query) {
         try {
             String encoded = URLEncoder.encode(query, StandardCharsets.UTF_8);
-            String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + encoded;
-
-            HttpURLConnection con = (HttpURLConnection) new URL(apiURL).openConnection();
-            con.setRequestMethod("GET");
-            con.setRequestProperty("X-Naver-Client-Id", clientId);
-            con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
-
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
-            String response = br.lines().collect(Collectors.joining());
-            br.close();
-
             ObjectMapper objectMapper = new ObjectMapper();
-            NaverSearchResponseDto result = objectMapper.readValue(response, NaverSearchResponseDto.class);
 
-            List<Bakery> bakeries = result.getItems().stream()
-                    .map(item -> Bakery.builder()
-                            .title(item.getTitle().replaceAll("<[^>]*>", "")) // HTML 태그 제거
-                            .category(item.getCategory())
-                            .address(item.getAddress())
-                            .roadAddress(item.getRoadAddress())
-                            .link(item.getLink())
-                            .mapx(item.getMapx())
-                            .mapy(item.getMapy())
-                            .build())
-                    .collect(Collectors.toList());
+            for (int start = 1; start <= 951; start += 50) {
+                String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + encoded
+                        + "&display=50&start=" + start
+                        + "&sort=random";
 
-            bakeryRepository.saveAll(bakeries);
+                HttpURLConnection con = (HttpURLConnection) new URL(apiURL).openConnection();
+                con.setRequestMethod("GET");
+                con.setRequestProperty("X-Naver-Client-Id", clientId);
+                con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
+
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+                String response = br.lines().collect(Collectors.joining());
+                br.close();
+
+                NaverSearchResponseDto result = objectMapper.readValue(response, NaverSearchResponseDto.class);
+
+                List<Bakery> bakeries = result.getItems().stream()
+                        .map(item -> Bakery.builder()
+                                .title(item.getTitle().replaceAll("<[^>]*>", "")) // HTML 태그 제거
+                                .category(item.getCategory())
+                                .address(item.getAddress())
+                                .roadAddress(item.getRoadAddress())
+                                .link(item.getLink())
+                                .mapx(item.getMapx())
+                                .mapy(item.getMapy())
+                                .description(item.getDescription())
+                                .build())
+                        .filter(bakery -> !bakeryRepository.existsByAddress(bakery.getAddress()))
+                        .collect(Collectors.toList());
+
+                System.out.println("[" + start + "] 저장 대상 수: " + bakeries.size());
+                bakeryRepository.saveAll(bakeries);
+            }
 
         } catch (Exception e) {
             throw new RuntimeException("API 호출 실패", e);

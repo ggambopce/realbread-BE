@@ -67,13 +67,13 @@ public class NaverMenuCrawler {
             // 클릭 이후 URL 변화 기다리기
             while (!driver.getCurrentUrl().contains("/place/")) {
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", shop);
-                Thread.sleep(10000); // 재시도 대기
+                Thread.sleep(5000); // 재시도 대기
             }
 
             // 상세페이지 진입 성공 이후
             String currentUrl = driver.getCurrentUrl();
 
-            // placePath 파라미터를 메뉴로 교체
+            // placePath 파라미터를 메뉴로 교체 메뉴 진입
             if (currentUrl.contains("placePath=")) {
                 String menuUrl = currentUrl.replaceAll("placePath=[^&]*", "placePath=/menu");
                 driver.get(menuUrl);
@@ -95,39 +95,51 @@ public class NaverMenuCrawler {
                 }
             }
 
+            //메뉴 크롤링
+            System.out.println("메뉴 크롤링 시작");
 
-            // 5. 메뉴 요소 탐색 (두 가지 클래스 중 하나)
-            List<WebElement> menus = driver.findElements(By.className("_3ak_I")); // 배달의민족 제공
-            if (menus.isEmpty()) {
-                menus = driver.findElements(By.className("V1UmJ")); // 가게 제공 메뉴
-            }
-
-            if (menus.isEmpty()) {
-                System.out.println("메뉴가 없습니다");
-                return null;
-            }
-
-            // 5. 메뉴 항목들 크롤링
-            List<WebElement> menuElements = driver.findElements(By.cssSelector(".menu_box .menu_item"));
-            if (menuElements.isEmpty()) {
-                System.out.println("메뉴 항목 없음");
-                return result;
-            }
+            List<WebElement> menuElements = driver.findElements(By.cssSelector("div.place_section_content ul li"));
+            System.out.println("메뉴 요소 수: " + menuElements.size());
 
             for (WebElement menu : menuElements) {
                 try {
-                    String name = menu.findElement(By.cssSelector(".menu_name")).getText();
-                    String price = menu.findElement(By.cssSelector(".menu_price")).getText();
+                    String name = "";
+                    String description = "";
+                    String price = "";
                     String imageUrl = "";
+
+                    // 메뉴명
                     try {
-                        imageUrl = menu.findElement(By.cssSelector("img")).getAttribute("src");
-                    } catch (Exception ignore) {}
-                    result.add(new MenuDto(name, price, imageUrl));
+                        name = menu.findElement(By.className("lPzHi")).getText();
+                    } catch (NoSuchElementException ignore) {
+                        System.out.println("메뉴명 없음");
+                    }
+
+                    // 메뉴 설명
+                    try {
+                        description = menu.findElement(By.className("kPogF")).getText();
+                    } catch (NoSuchElementException ignore) {}
+
+                    // 메뉴 가격
+                    try {
+                        price = menu.findElement(By.className("GXS1X")).getText();
+                    } catch (NoSuchElementException ignore) {}
+
+                    // 이미지 URL
+                    try {
+                        WebElement img = menu.findElement(By.cssSelector(".place_thumb img"));
+                        imageUrl = img.getAttribute("src");
+                    } catch (NoSuchElementException ignore) {}
+
+                    if (!name.isEmpty()) {
+                        result.add(new MenuDto(name, price, imageUrl, description)); // description 포함 DTO 필요
+                    }
+
                 } catch (Exception e) {
-                    // 개별 메뉴 요소에 문제 있을 경우 건너뜀
                     continue;
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

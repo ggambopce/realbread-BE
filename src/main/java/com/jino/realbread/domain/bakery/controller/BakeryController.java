@@ -1,5 +1,6 @@
-package com.jino.realbread.naverapi;
+package com.jino.realbread.domain.bakery.controller;
 
+import com.jino.realbread.naverapi.NaverSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

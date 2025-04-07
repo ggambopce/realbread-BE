@@ -1,6 +1,8 @@
 package com.jino.realbread.naverapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jino.realbread.domain.bakery.entity.Bakery;
+import com.jino.realbread.domain.bakery.repository.BakeryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

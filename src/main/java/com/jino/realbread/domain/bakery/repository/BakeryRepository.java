@@ -1,5 +1,6 @@
-package com.jino.realbread.naverapi;
+package com.jino.realbread.domain.bakery.repository;
 
+import com.jino.realbread.domain.bakery.entity.Bakery;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

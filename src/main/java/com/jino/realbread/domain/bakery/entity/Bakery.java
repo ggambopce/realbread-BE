@@ -1,4 +1,4 @@
-package com.jino.realbread.naverapi;
+package com.jino.realbread.domain.bakery.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

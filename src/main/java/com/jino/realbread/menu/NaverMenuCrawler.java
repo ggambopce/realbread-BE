@@ -118,18 +118,21 @@ public class NaverMenuCrawler {
                     // 메뉴 설명
                     try {
                         description = menu.findElement(By.className("kPogF")).getText();
-                    } catch (NoSuchElementException ignore) {}
+                    } catch (NoSuchElementException ignore) {
+                    }
 
                     // 메뉴 가격
                     try {
                         price = menu.findElement(By.className("GXS1X")).getText();
-                    } catch (NoSuchElementException ignore) {}
+                    } catch (NoSuchElementException ignore) {
+                    }
 
                     // 이미지 URL
                     try {
                         WebElement img = menu.findElement(By.cssSelector(".place_thumb img"));
                         imageUrl = img.getAttribute("src");
-                    } catch (NoSuchElementException ignore) {}
+                    } catch (NoSuchElementException ignore) {
+                    }
 
                     if (!name.isEmpty()) {
                         result.add(new MenuDto(name, price, imageUrl, description)); // description 포함 DTO 필요

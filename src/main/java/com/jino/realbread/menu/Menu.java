@@ -20,6 +20,7 @@ public class Menu {
 
     private String menuName;
     private String price;
+    @Column(length = 2000)
     private String imageUrl;
     private String description;
 

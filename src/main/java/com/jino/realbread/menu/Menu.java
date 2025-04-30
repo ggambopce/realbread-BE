@@ -16,7 +16,7 @@ public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int menuNumber;
 
     private String menuName;
     private String price;
@@ -24,4 +24,5 @@ public class Menu {
     private String imageUrl;
     private String description;
 
+    private int bakeryNumber;
 }

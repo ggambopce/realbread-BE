@@ -1,14 +1,11 @@
 package com.jino.realbread.domain.bakery.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "bakery")
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,5 +22,7 @@ public class Bakery {
     private String link;
     private String mapx;
     private String mapy;
-    private String description;
+    private int favoriteCount;
+    private int commentCount;
+
 }

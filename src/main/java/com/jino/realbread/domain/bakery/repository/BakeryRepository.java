@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface BakeryRepository extends JpaRepository<Bakery, Long> {
 
     boolean existsByAddress(String address);
+
+
 }

@@ -57,7 +57,6 @@ public class NaverSearchService {
                             .link(item.getLink())
                             .mapx(item.getMapx())
                             .mapy(item.getMapy())
-                            .description(item.getDescription())
                             .build())
                     .filter(bakery -> !bakeryRepository.existsByAddress(bakery.getAddress()))
                     .collect(Collectors.toList());

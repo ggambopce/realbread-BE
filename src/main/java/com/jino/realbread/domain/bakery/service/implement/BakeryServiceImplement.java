@@ -27,7 +27,7 @@ public class BakeryServiceImplement implements BakeryService {
 
         try {
             resultSet = bakeryRepository.getBakery(bakeryNumber);
-            if (resultSet == null) return GetBakeryResponseDto.noExistBakery();
+            if (resultSet.isEmpty()) return GetBakeryResponseDto.noExistBakery();
 
 
         } catch (Exception exception) {

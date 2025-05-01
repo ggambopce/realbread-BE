@@ -1,5 +1,7 @@
 package com.jino.realbread.domain.bakery.service.implement;
 
+import com.jino.realbread.domain.bakery.dto.BakeryMarkerListItem;
+import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
 import com.jino.realbread.domain.bakery.repository.BakeryRepository;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryResultSet;
@@ -37,5 +39,19 @@ public class BakeryServiceImplement implements BakeryService {
         return GetBakeryResponseDto.success(resultSet);
     }
 
+    @Override
+    public ResponseEntity<? super GetBakeryMarkerListResponseDto> getRandomMarkerList() {
 
+        List<BakeryMarkerListItem> markerList;
+
+        try {
+         markerList = bakeryRepository.getRandomMarkerLimit100();
+         if (markerList.isEmpty()) return GetBakeryMarkerListResponseDto.noExistMarker();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetBakeryMarkerListResponseDto.success(markerList);
+
+    }
 }

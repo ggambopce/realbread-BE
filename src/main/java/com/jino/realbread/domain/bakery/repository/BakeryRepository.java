@@ -1,5 +1,6 @@
 package com.jino.realbread.domain.bakery.repository;
 
+import com.jino.realbread.domain.bakery.dto.BakeryMarkerListItem;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
 import com.jino.realbread.domain.bakery.entity.Bakery;
@@ -42,5 +43,5 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
             "LIMIT 100 ",
             nativeQuery = true
     )
-    List<GetBakeryMarkerListResponseDto> getRandomMarkerLimit100();
+    List<BakeryMarkerListItem> getRandomMarkerLimit100();
 }

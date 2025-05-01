@@ -1,5 +1,7 @@
 package com.jino.realbread.domain.bakery.repository;
 
+import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
+import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
 import com.jino.realbread.domain.bakery.entity.Bakery;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryResultSet;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,4 +32,15 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
             nativeQuery = true)
     List<GetBakeryResultSet> getBakery(Integer boardNumber);
 
+    @Query(value = "SELECT " +
+            "B.id AS bakery_id, " +
+            "B.title AS title, " +
+            "B.mapx AS mapx, " +
+            "B.mapy AS mapy " +
+            "FROM bakery AS B " +
+            "ORDER BY RAND() " +
+            "LIMIT 100 ",
+            nativeQuery = true
+    )
+    List<GetBakeryMarkerListResponseDto> getRandomMarkerLimit100();
 }

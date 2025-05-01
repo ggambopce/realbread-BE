@@ -8,6 +8,7 @@ public interface GetBakeryResultSet {
     Integer getFavoriteCount();
     Integer getCommentCount();
 
+    Integer getMenuNumber();
     String getMenuName();
     String getPrice();
     String getImageUrl();

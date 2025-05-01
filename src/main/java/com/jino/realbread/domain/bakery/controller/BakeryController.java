@@ -1,5 +1,6 @@
 package com.jino.realbread.domain.bakery.controller;
 
+import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
 import com.jino.realbread.domain.bakery.service.BakeryService;
 import com.jino.realbread.naverapi.NaverSearchService;
@@ -24,6 +25,12 @@ public class BakeryController {
     @GetMapping("/{bakeryNumber}")
     public ResponseEntity<? super GetBakeryResponseDto> getBakery(@PathVariable("bakeryNumber") Integer bakeryNumber) {
         ResponseEntity<? super GetBakeryResponseDto> response = bakeryService.getBakery(bakeryNumber);
+        return response;
+    }
+
+    @GetMapping("/marker/random")
+    public ResponseEntity<? super GetBakeryMarkerListResponseDto> getRandomMarkerList() {
+        ResponseEntity<? super GetBakeryMarkerListResponseDto> response = bakeryService.getRandomMarkerList();
         return response;
     }
 }

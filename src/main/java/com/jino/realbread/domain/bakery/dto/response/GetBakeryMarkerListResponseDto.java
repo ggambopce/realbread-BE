@@ -1,6 +1,6 @@
 package com.jino.realbread.domain.bakery.dto.response;
 
-import com.jino.realbread.domain.bakery.dto.BakeryMarkerListItem;
+import com.jino.realbread.domain.bakery.repository.resultSet.BakeryMarkerListItem;
 import com.jino.realbread.global.common.ResponseCode;
 import com.jino.realbread.global.common.ResponseMessage;
 import com.jino.realbread.global.dto.response.ResponseDto;

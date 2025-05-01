@@ -1,19 +1,16 @@
 package com.jino.realbread.domain.bakery.service.implement;
 
-import com.jino.realbread.domain.bakery.dto.BakeryMarkerListItem;
+import com.jino.realbread.domain.bakery.repository.resultSet.BakeryMarkerListItem;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
 import com.jino.realbread.domain.bakery.repository.BakeryRepository;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryResultSet;
 import com.jino.realbread.domain.bakery.service.BakeryService;
 import com.jino.realbread.global.dto.response.ResponseDto;
-import com.jino.realbread.menu.Menu;
-import com.jino.realbread.menu.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

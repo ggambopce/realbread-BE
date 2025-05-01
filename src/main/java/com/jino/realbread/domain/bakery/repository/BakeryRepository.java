@@ -1,8 +1,6 @@
 package com.jino.realbread.domain.bakery.repository;
 
-import com.jino.realbread.domain.bakery.dto.BakeryMarkerListItem;
-import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
-import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
+import com.jino.realbread.domain.bakery.repository.resultSet.BakeryMarkerListItem;
 import com.jino.realbread.domain.bakery.entity.Bakery;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryResultSet;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,7 +32,7 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
     List<GetBakeryResultSet> getBakery(Integer boardNumber);
 
     @Query(value = "SELECT " +
-            "B.id AS bakery_id, " +
+            "B.id AS bakeryId, " +
             "B.title AS title, " +
             "B.mapx AS mapx, " +
             "B.mapy AS mapy " +

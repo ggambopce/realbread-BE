@@ -1,9 +1,16 @@
 package com.jino.realbread.domain.user.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Entity
-public class User {
+@Entity(name = "user")
+@Table(name = "user")
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserEntity {
 
     @Id
     @GeneratedValue
@@ -12,6 +19,7 @@ public class User {
     private String oauthId;
     private String provider;
 
+    @Column(unique = true)
     private String email;
     private String nickname;
     private String profileImage;

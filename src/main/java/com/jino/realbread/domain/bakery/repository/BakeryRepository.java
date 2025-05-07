@@ -32,10 +32,10 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
     List<GetBakeryResultSet> getBakery(Integer boardNumber);
 
     @Query(value = "SELECT " +
-            "B.id AS bakeryId, " +
+            "B.id AS bakeryNumber, " +
             "B.title AS title, " +
-            "B.mapx AS mapx, " +
-            "B.mapy AS mapy " +
+            "B.mapx / 10000000.0 AS mapx, " +
+            "B.mapy / 10000000.0 AS mapy " +
             "FROM bakery AS B " +
             "ORDER BY RAND() " +
             "LIMIT 100 ",

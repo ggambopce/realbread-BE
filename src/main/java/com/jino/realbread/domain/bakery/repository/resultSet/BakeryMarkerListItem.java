@@ -6,7 +6,7 @@ import lombok.Getter;
 
 public interface BakeryMarkerListItem {
 
-    Integer getBakeryId();
+    Integer getBakeryNumber();
     String getTitle();
     String getMapx();
     String getMapy();

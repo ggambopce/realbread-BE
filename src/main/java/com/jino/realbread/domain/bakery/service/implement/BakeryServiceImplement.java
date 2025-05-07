@@ -28,7 +28,6 @@ public class BakeryServiceImplement implements BakeryService {
             resultSet = bakeryRepository.getBakery(bakeryNumber);
             if (resultSet.isEmpty()) return GetBakeryResponseDto.noExistBakery();
 
-
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
@@ -42,8 +41,8 @@ public class BakeryServiceImplement implements BakeryService {
         List<BakeryMarkerListItem> markerList;
 
         try {
-         markerList = bakeryRepository.getRandomMarkerLimit100();
-         if (markerList.isEmpty()) return GetBakeryMarkerListResponseDto.noExistMarker();
+            markerList = bakeryRepository.getRandomMarkerLimit100();
+            if (markerList.isEmpty()) return GetBakeryMarkerListResponseDto.noExistMarker();
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();

@@ -70,7 +70,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-
     }
 
     private String parseBearerToken(HttpServletRequest request) {
@@ -87,6 +86,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = authorization.substring(7);
         return token;
-
     }
 }

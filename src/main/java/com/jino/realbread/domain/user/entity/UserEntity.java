@@ -26,4 +26,16 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public UserEntity (String oauthId, String provider) {
+        this.oauthId = oauthId;
+        this.provider = provider;
+        this.role = Role.ROLE_USER; // 기본 권한 설정
+        this.email = null;
+        this.nickname = null;
+        this.profileImage = null;
+
+    }
+
+
 }

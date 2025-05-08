@@ -1,4 +1,4 @@
-package com.jino.realbread.global.jwt.provider;
+package com.jino.realbread.global.security.provider;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

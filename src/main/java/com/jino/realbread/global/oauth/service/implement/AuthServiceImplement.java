@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jino.realbread.domain.user.entity.Role;
 import com.jino.realbread.domain.user.entity.UserEntity;
 import com.jino.realbread.domain.user.repository.UserRepository;
+import com.jino.realbread.global.oauth.dto.OAuthUserInfoDto;
 import com.jino.realbread.global.oauth.entity.CustomOAuth2User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -22,29 +23,32 @@ public class AuthServiceImplement extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {
-         OAuth2User oAuth2User = super.loadUser(request);
+        OAuth2User oAuth2User = super.loadUser(request);
 
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         // kakao에서 유저 정보 꺼내기
+        String oauthId = String.valueOf(attributes.get("id"));
         Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
 
-        String oauthId = String.valueOf(attributes.get("id"));
         String email = (String) kakaoAccount.get("email");
         String nickname = (String) profile.get("nickname");
         String profileImage = (String) profile.get("profile_image_url");
 
-        // DB에 해당 oauthId가 있는지 확인
-        UserEntity userEntity = userRepository.findByOauthIdAndProvider(oauthId, "kakao")
-                .orElseGet(() -> {
-                    // 없으면 저장
-                    UserEntity newUser = new UserEntity(null, oauthId, "kakao", email, nickname, profileImage, Role.ROLE_USER);
-                    return userRepository.save(newUser);
-                });
+        // DTO 구성
+        OAuthUserInfoDto dto = new OAuthUserInfoDto();
+        dto.setOauthId(oauthId);
+        dto.setEmail(email);
+        dto.setNickname(nickname);
+        dto.setProfileImage(profileImage);
 
-         return new CustomOAuth2User(userEntity, attributes);
+        // 저장 or 조회
+        UserEntity userEntity = userRepository.findByOauthId(oauthId)
+                .orElseGet(() -> userRepository.save(UserEntity.from(dto)));
+
+        // 반환할 사용자 정의 OAuth2User 생성
+        return new CustomOAuth2User(userEntity);
     }
-
 
 }

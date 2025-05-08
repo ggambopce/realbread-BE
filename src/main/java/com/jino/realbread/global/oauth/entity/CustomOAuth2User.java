@@ -10,30 +10,28 @@ import java.util.Map;
 
 public class CustomOAuth2User implements OAuth2User {
 
-    private final UserEntity userEntity;
-    private final Map<String, Object> attributes;
+    private final UserEntity user;
 
-    public CustomOAuth2User(UserEntity userEntity, Map<String, Object> attributes) {
-        this.userEntity = userEntity;
-        this.attributes = attributes;
+    public CustomOAuth2User(UserEntity user) {
+        this.user = user;
     }
 
     @Override
     public Map<String, Object> getAttributes() {
-        return attributes;
+        return Map.of("id", user.getId());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList(userEntity.getRole().name());
+        return AuthorityUtils.createAuthorityList(user.getRole().name());
     }
 
     @Override
     public String getName() {
-        return String.valueOf(userEntity.getId());
+        return user.getId().toString();
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public UserEntity getUser() {
+        return user;
     }
 }

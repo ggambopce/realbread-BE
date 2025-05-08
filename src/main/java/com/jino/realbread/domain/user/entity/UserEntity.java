@@ -1,5 +1,6 @@
 package com.jino.realbread.domain.user.entity;
 
+import com.jino.realbread.global.oauth.dto.OAuthUserInfoDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,6 @@ public class UserEntity {
     private Long id;
 
     private String oauthId;
-    private String provider;
 
     @Column(unique = true)
     private String email;
@@ -27,15 +27,23 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public UserEntity (String oauthId, String provider) {
+    public UserEntity(String oauthId, String email, String nickname, String profileImage, Role role) {
         this.oauthId = oauthId;
-        this.provider = provider;
-        this.role = Role.ROLE_USER; // 기본 권한 설정
-        this.email = null;
-        this.nickname = null;
-        this.profileImage = null;
-
+        this.email = email;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.role = Role.ROLE_USER; // 기본 권한 부여
     }
 
+    public static UserEntity from(OAuthUserInfoDto dto) {
+        return new UserEntity(
+                dto.getOauthId(),
+                dto.getEmail(),
+                dto.getNickname(),
+                dto.getProfileImage(),
+                Role.ROLE_USER
+        );
+    }
 
 }
+

@@ -23,11 +23,11 @@ public class JwtProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes); // HS256에 적합한 SecretKey 생성
     }
 
-    public String create(Long userId) {
+    public String create(String userId) {
         Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
 
         return Jwts.builder()
-                .setSubject(userId.toString())
+                .setSubject(userId)
                 .setIssuedAt(new Date())
                 .setExpiration(expiredDate)
                 .signWith(key, SignatureAlgorithm.HS256)

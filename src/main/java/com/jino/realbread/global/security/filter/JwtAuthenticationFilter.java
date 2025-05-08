@@ -1,5 +1,8 @@
 package com.jino.realbread.global.security.filter;
 
+import com.jino.realbread.domain.user.entity.Role;
+import com.jino.realbread.domain.user.entity.UserEntity;
+import com.jino.realbread.domain.user.repository.UserRepository;
 import com.jino.realbread.global.security.provider.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -8,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,12 +21,14 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -37,15 +43,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            String email = jwtProvider.validate(token);
+            String userId = jwtProvider.validate(token);
 
-            if (email == null) {
+            if (userId == null) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
-            AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, null,
-                    AuthorityUtils.NO_AUTHORITIES);
+            Long id = Long.parseLong(userId);
+            UserEntity userEntity = userRepository.findById(id).orElseThrow();
+            Role role = userEntity.getRole(); // role : ROLE_USER, ROLE_ADMIN
+
+            List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(role.name());
+            AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, null,
+                    authorities);
 
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

@@ -16,7 +16,8 @@ public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int menuNumber;
+    @Column(name = "id")
+    private Integer menuNumber;
 
     private String menuName;
     private String price;

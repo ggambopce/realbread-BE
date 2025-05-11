@@ -51,6 +51,7 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(endponit ->endponit.baseUri("/api/auth/oauth2"))
                         .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/kakao"))
                         .userInfoEndpoint(endpoint -> endpoint.userService(oAuth2UserService))
                         .successHandler(oAuth2SuccessHandler)

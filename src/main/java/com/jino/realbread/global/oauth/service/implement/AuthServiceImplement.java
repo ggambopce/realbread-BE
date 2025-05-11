@@ -19,7 +19,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthServiceImplement extends DefaultOAuth2UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {

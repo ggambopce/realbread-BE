@@ -47,17 +47,18 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
     @Query(value = "SELECT " +
             "* " +
             "FROM ( " +
-            "SELECT " +
-            "b.id AS bakeryNumber, " +
-            "b.title AS title, " +
-            "b.favorite_count AS favoriteCount, " +
-            "b.comment_count AS commentCount, " +
-            "m.id AS menuNumber, " +
-            "m.image_url AS imageUrl, " +
-            "ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY m.id) AS rn " +
-            "FROM bakery b " +
-            "LEFT JOIN menu m ON b.id = m.bakery_number " +
-            ") ranked ",
+                "SELECT " +
+                "b.id AS bakeryNumber, " +
+                "b.title AS title, " +
+                "b.favorite_count AS favoriteCount, " +
+                "b.comment_count AS commentCount, " +
+                "m.id AS menuNumber, " +
+                "m.image_url AS imageUrl, " +
+                "ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY m.id) AS rn " +
+                "FROM bakery b " +
+                "LEFT JOIN menu m ON b.id = m.bakery_number " +
+                ") ranked " +
+            "WHERE rn <= 4",
             nativeQuery = true
     )
     List<GetBakeryMainListItemResultSet> getBakeryMainList();

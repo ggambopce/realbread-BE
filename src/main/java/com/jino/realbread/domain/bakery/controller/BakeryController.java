@@ -1,5 +1,6 @@
 package com.jino.realbread.domain.bakery.controller;
 
+import com.jino.realbread.domain.bakery.dto.response.GetBakeryMainListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
 import com.jino.realbread.domain.bakery.service.BakeryService;
@@ -33,6 +34,11 @@ public class BakeryController {
     public ResponseEntity<? super GetBakeryMarkerListResponseDto> getRandomMarkerList() {
         ResponseEntity<? super GetBakeryMarkerListResponseDto> response = bakeryService.getRandomMarkerList();
         return response;
+    }
+
+    @GetMapping("/main-list")
+    public ResponseEntity<? super GetBakeryMainListResponseDto> getMainBakeryList() {
+        return bakeryService.getMainBakeryList();
     }
 
 

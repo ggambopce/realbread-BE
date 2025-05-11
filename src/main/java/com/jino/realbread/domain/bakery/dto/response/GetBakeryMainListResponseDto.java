@@ -64,11 +64,6 @@ public class GetBakeryMainListResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    public static ResponseEntity<ResponseDto> noExistBakery() {
-        ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_BAKERY, ResponseMessage.NOT_EXISTED_BAKERY);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-    }
-
     // 내부 클래스: 빵집 요약 정보
     @Getter
     @AllArgsConstructor

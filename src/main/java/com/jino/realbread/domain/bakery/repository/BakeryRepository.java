@@ -44,25 +44,21 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
     )
     List<BakeryMarkerListItem> getRandomMarkerLimit100();
 
-    @Query(value =
+    @Query(value = "SELECT " +
+            "* " +
+            "FROM ( " +
             "SELECT " +
-                    "* " +
-                    "FROM ( " +
-                    "SELECT " +
-                    "b.id AS bakeryNumber, " +
-                    "b.title AS title, " +
-                    "b.favorite_count AS favoriteCount, " +
-                    "b.comment_count AS commentCount, " +
-                    "m.id AS menuNumber, " +
-                    "m.menu_name AS menuName, " +
-                    "m.price AS price, " +
-                    "m.image_url AS imageUrl, " +
-                    "m.description AS description, " +
-                    "ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY m.id) AS rn " +
-                    "FROM bakery b " +
-                    "LEFT JOIN menu m ON b.id = m.bakery_number " +
-                    ") ranked ",
-        nativeQuery = true
+            "b.id AS bakeryNumber, " +
+            "b.title AS title, " +
+            "b.favorite_count AS favoriteCount, " +
+            "b.comment_count AS commentCount, " +
+            "m.id AS menuNumber, " +
+            "m.image_url AS imageUrl, " +
+            "ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY m.id) AS rn " +
+            "FROM bakery b " +
+            "LEFT JOIN menu m ON b.id = m.bakery_number " +
+            ") ranked ",
+            nativeQuery = true
     )
     List<GetBakeryMainListItemResultSet> getBakeryMainList();
 }

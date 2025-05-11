@@ -34,4 +34,6 @@ public class BakeryController {
         ResponseEntity<? super GetBakeryMarkerListResponseDto> response = bakeryService.getRandomMarkerList();
         return response;
     }
+
+
 }

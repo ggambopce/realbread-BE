@@ -5,35 +5,18 @@ import org.springframework.ai.chat.ChatClient;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Service
 @RequiredArgsConstructor
-public class ChatController {
+public class PromptChatService {
+
     private final ChatClient chatClient;
 
+    public String counselTextResponse(String message) {
 
-    @PostMapping("api/chat")
-    public Map<String, String> chat(@RequestBody String message) {
-        Map<String, String> responses = new HashMap<>();
-
-        String openAiResponse = chatClient.call(message);
-        responses.put("openai(chatGPT) 응답", openAiResponse);
-
-
-        return responses;
-    }
-
-    @PostMapping("api/promptchat")
-    public Map<String, String> promptChat(@RequestBody String message) {
-        Map<String, String> responses = new HashMap<>();
-
-        // 챗봇 성향 프롬프트: 아이들을 위한 상담자 역할
         PromptTemplate promptTemplate = new PromptTemplate("""
                 핵심 목표:
                             * 행동의 문제점 명확히 인식: 당신의 행동은 잘못입니다.
@@ -74,17 +57,9 @@ public class ChatController {
                 [질문]
                 {question}
                 """);
-
-        Prompt prompt = promptTemplate.create(Map.of("question", message));
-
+        Prompt prompt = promptTemplate.create(Map.of("question" , message));
         ChatResponse chatResponse = chatClient.call(prompt);
+        return chatResponse.getResults().get(0).getOutput().getContent();
 
-        String content = chatResponse.getResults().get(0).getOutput().getContent();
-        // 이건 버전에 따라 다름
-
-        responses.put("상담 챗봇 응답", content);
-
-        return responses;
     }
-
 }

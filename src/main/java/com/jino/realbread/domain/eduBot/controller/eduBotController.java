@@ -19,8 +19,12 @@ public class eduBotController {
 
     private final CounselService counselService;
 
-    @PostMapping("/counsel")
+    @PostMapping(value = "/counsel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> processCounsel(@RequestParam("audioFile") MultipartFile audioFile) {
+
+        System.out.println("audioFile: " + audioFile); // null인지 확인
+        if (audioFile == null) throw new RuntimeException("파일이 null입니다");
+
         byte[] audioBytes = counselService.processCounsel(audioFile);
 
         HttpHeaders headers = new HttpHeaders();

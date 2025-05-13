@@ -39,4 +39,4 @@ out/
 .yml
 src/main/resources/application.yml
 
-/credentials/
+src/main/resources/credentials/*.json

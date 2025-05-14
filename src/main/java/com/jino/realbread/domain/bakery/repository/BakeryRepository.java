@@ -58,4 +58,6 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
         List<GetBakeryMainListItemResultSet> getBakeryMainList();
 
         Bakery findByBakeryId(Integer bakeryNumber);
+
+        boolean existsByBakeryId(Integer bakeryNumber);
 }

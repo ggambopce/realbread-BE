@@ -25,4 +25,15 @@ public class Bakery {
     private int favoriteCount;
     private int commentCount;
 
+    public void increaseFavoriteCount() {
+        this.favoriteCount++;
+    }
+
+    public void decreaseFavoriteCount() {
+        this.favoriteCount--;
+    }
+
+    public void increaseCommentCount() {
+        this.commentCount++;
+    }
 }

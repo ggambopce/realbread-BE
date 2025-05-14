@@ -19,7 +19,7 @@ public class PostCommentResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    public static ResponseEntity<ResponseDto> noExistBoard() {
+    public static ResponseEntity<ResponseDto> noExistBakery() {
         ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_BAKERY, ResponseMessage.NOT_EXISTED_BAKERY);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }

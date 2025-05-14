@@ -23,10 +23,10 @@ public class CommentEntity {
     private String choiceMenu;
     private String content;
     private String writeDatetime;
-    private String userEmail;
-    private int bakeryNumber;
+    private Integer userId;
+    private Integer bakeryNumber;
 
-    public CommentEntity(PostCommentRequestDto dto, Integer bakeryNumber, String email) {
+    public CommentEntity(PostCommentRequestDto dto, Integer bakeryNumber, Integer userId) {
 
         Date now = Date.from(Instant.now());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
@@ -35,7 +35,7 @@ public class CommentEntity {
         this.choiceMenu = dto.getChoiceMenu();
         this.content = dto.getContent();
         this.writeDatetime = writeDatetime;
-        this.userEmail = email;
+        this.userId = userId;
         this.bakeryNumber = bakeryNumber;
 
     }

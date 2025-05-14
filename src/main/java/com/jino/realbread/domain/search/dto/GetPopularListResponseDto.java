@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.jino.realbread.domain.search.repository.resultSet.GetPopularListResultSet;
 import com.jino.realbread.global.common.ResponseCode;
 import com.jino.realbread.global.common.ResponseMessage;
 import com.jino.realbread.global.dto.response.ResponseDto;

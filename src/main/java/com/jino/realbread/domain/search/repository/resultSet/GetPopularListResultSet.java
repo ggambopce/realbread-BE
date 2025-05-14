@@ -1,6 +1,6 @@
 package com.jino.realbread.domain.search.repository.resultSet;
 
-public class GetPopularListResultSet {
+public interface GetPopularListResultSet {
 
     String getSearchWord();
 

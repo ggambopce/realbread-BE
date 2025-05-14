@@ -27,54 +27,56 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final DefaultOAuth2UserService oAuth2UserService;
-    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
+        private final DefaultOAuth2UserService oAuth2UserService;
+        private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-    @Bean
-    protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
+        @Bean
+        protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> {
-                }) // default cors 설정
-                .httpBasic(httpBasic -> httpBasic.disable())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/edu-bot/counsel", "/api/promptchat", "/api/chat", "/api/test","/api/test/client-chat").permitAll()
-                        .requestMatchers("/", "/api/auth/**", "/api/search/**", "/oauth2/**",
-                                "/file/**")
-                        .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/bakery/**", "/api/user/*")
-                        .permitAll()
-                        .requestMatchers("/api/admin/edubot/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .authorizationEndpoint(endponit ->endponit.baseUri("/api/auth/oauth2"))
-                        .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/kakao"))
-                        .userInfoEndpoint(endpoint -> endpoint.userService(oAuth2UserService))
-                        .successHandler(oAuth2SuccessHandler)
-                )
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(new FailedAuthenticationEntryPoint()))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                httpSecurity
+                                .csrf(csrf -> csrf.disable())
+                                .cors(cors -> {
+                                }) // default cors 설정
+                                .httpBasic(httpBasic -> httpBasic.disable())
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers("/api/edu-bot/counsel", "/api/promptchat", "/api/chat",
+                                                                "/api/test", "/api/test/client-chat")
+                                                .permitAll()
+                                                .requestMatchers("/", "/api/auth/**", "/api/search/**", "/oauth2/**",
+                                                                "/api/bakery/**",
+                                                                "/file/**")
+                                                .permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/api/bakery/**", "/api/user/*")
+                                                .permitAll()
+                                                .requestMatchers("/api/admin/edubot/**").hasRole("ADMIN")
+                                                .anyRequest().authenticated())
+                                .oauth2Login(oauth2 -> oauth2
+                                                .authorizationEndpoint(endponit -> endponit.baseUri("/api/auth/oauth2"))
+                                                .redirectionEndpoint(endpoint -> endpoint
+                                                                .baseUri("/login/oauth2/code/kakao"))
+                                                .userInfoEndpoint(endpoint -> endpoint.userService(oAuth2UserService))
+                                                .successHandler(oAuth2SuccessHandler))
+                                .exceptionHandling(exception -> exception
+                                                .authenticationEntryPoint(new FailedAuthenticationEntryPoint()))
+                                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return httpSecurity.build();
+                return httpSecurity.build();
 
-    }
+        }
 
 }
 
 class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) throws IOException, ServletException {
+        @Override
+        public void commence(HttpServletRequest request, HttpServletResponse response,
+                        AuthenticationException authException) throws IOException, ServletException {
 
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("{ \"code\": \"AF\", \"message\": \"Authorization Failed. \" }");
-    }
+                response.setContentType("application/json");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("{ \"code\": \"AF\", \"message\": \"Authorization Failed. \" }");
+        }
 }

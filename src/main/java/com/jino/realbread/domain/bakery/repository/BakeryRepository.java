@@ -57,5 +57,5 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
                         "WHERE rn <= 4", nativeQuery = true)
         List<GetBakeryMainListItemResultSet> getBakeryMainList();
 
-        Bakery findByBakeryNumber(Integer bakeryNumber);
+        Bakery findByBakeryId(Integer bakeryNumber);
 }

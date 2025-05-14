@@ -27,7 +27,7 @@ public class CommentServiceImplement implements CommentService {
             Integer userId) {
         try {
 
-            Bakery bakeryEntity = bakeryRepository.findByBakeryNumber(bakeryNumber);
+            Bakery bakeryEntity = bakeryRepository.findByBakeryId(bakeryNumber);
             if (bakeryEntity == null)
                 return PostCommentResponseDto.noExistBakery();
 

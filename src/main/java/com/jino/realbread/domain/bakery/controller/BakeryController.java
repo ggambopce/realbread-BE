@@ -24,7 +24,7 @@ public class BakeryController {
         return ResponseEntity.ok("저장 완료");
     }
 
-    @GetMapping("/{bakeryNumber}")
+    @GetMapping("/detail/{bakeryNumber}")
     public ResponseEntity<? super GetBakeryResponseDto> getBakery(@PathVariable("bakeryNumber") Integer bakeryNumber) {
         ResponseEntity<? super GetBakeryResponseDto> response = bakeryService.getBakery(bakeryNumber);
         return response;
@@ -40,6 +40,5 @@ public class BakeryController {
     public ResponseEntity<? super GetBakeryMainListResponseDto> getMainBakeryList() {
         return bakeryService.getMainBakeryList();
     }
-
 
 }

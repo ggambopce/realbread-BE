@@ -13,7 +13,8 @@ public class Bakery {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id")
+    private Integer bakeryId;
 
     private String title;
     private String category;

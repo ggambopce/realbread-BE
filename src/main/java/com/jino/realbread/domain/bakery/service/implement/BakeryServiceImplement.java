@@ -65,12 +65,22 @@ public class BakeryServiceImplement implements BakeryService {
     }
 
     @Override
-    public ResponseEntity<? super GetBakeryMainListResponseDto> getMainBakeryList() {
+    public ResponseEntity<? super GetBakeryMainListResponseDto> getMainBakeryList(String sort) {
 
         List<GetBakeryMainListItemResultSet> resultSets;
 
         try {
-            resultSets = bakeryRepository.getBakeryMainList();
+
+            switch (sort) {
+                case "review":
+                    resultSets = bakeryRepository.getBakeryMainListOrderByReviewCount();
+                    break;
+                case "favorite":
+                    resultSets = bakeryRepository.getBakeryMainListOrderByFavoriteCount();
+                    break;
+                default:
+                    resultSets = bakeryRepository.getBakeryMainList(); // 기본 정렬 (예: 최신순)
+            }
 
         } catch (Exception exception) {
             exception.printStackTrace();

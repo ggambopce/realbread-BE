@@ -13,7 +13,7 @@ public interface BakeryService {
 
     ResponseEntity<? super GetBakeryMarkerListResponseDto> getRandomMarkerList();
 
-    ResponseEntity<? super GetBakeryMainListResponseDto> getMainBakeryList();
+    ResponseEntity<? super GetBakeryMainListResponseDto> getMainBakeryList(String sort);
 
     ResponseEntity<? super GetSearchBakeryListResponseDto> getSearchBakeryList(String searchWord, String preSearchWord);
 }

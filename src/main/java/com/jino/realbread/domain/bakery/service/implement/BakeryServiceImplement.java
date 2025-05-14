@@ -6,15 +6,19 @@ import com.jino.realbread.domain.bakery.repository.resultSet.BakeryMarkerListIte
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetSearchBakeryListResponseDto;
+import com.jino.realbread.domain.bakery.entity.Bakery;
 import com.jino.realbread.domain.bakery.repository.BakeryRepository;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryMainListItemResultSet;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryResultSet;
 import com.jino.realbread.domain.bakery.service.BakeryService;
 import com.jino.realbread.domain.favorite.dto.response.GetFavoriteListResponseDto;
+import com.jino.realbread.domain.favorite.dto.response.PutFavoriteResponseDto;
+import com.jino.realbread.domain.favorite.entity.FavoriteEntity;
 import com.jino.realbread.domain.favorite.repository.FavoriteRepository;
 import com.jino.realbread.domain.favorite.repository.resultSet.GetFavoriteListResultSet;
 import com.jino.realbread.domain.search.entity.SearchLogEntity;
 import com.jino.realbread.domain.search.repository.SearchLogRepository;
+import com.jino.realbread.domain.user.repository.UserRepository;
 import com.jino.realbread.domain.view.BakeryListViewEntity;
 import com.jino.realbread.domain.view.repository.BakeryListViewRepository;
 import com.jino.realbread.global.dto.response.ResponseDto;
@@ -33,6 +37,7 @@ public class BakeryServiceImplement implements BakeryService {
     private final SearchLogRepository searchLogRepository;
     private final BakeryListViewRepository bakeryListViewRepository;
     private final FavoriteRepository favoriteRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity<? super GetBakeryResponseDto> getBakery(Integer bakeryNumber) {
@@ -138,6 +143,38 @@ public class BakeryServiceImplement implements BakeryService {
             return ResponseDto.databaseError();
         }
         return GetFavoriteListResponseDto.success(resultSets);
+    }
+
+    @Override
+    public ResponseEntity<? super PutFavoriteResponseDto> putFavorite(Integer bakeryNumber, Integer userId) {
+
+        try {
+
+            boolean existedUser = userRepository.existsById(userId);
+            if (!existedUser)
+                return PutFavoriteResponseDto.noExistUser();
+
+            Bakery bakeryEntity = bakeryRepository.findByBakeryId(bakeryNumber);
+            if (bakeryEntity == null)
+                return PutFavoriteResponseDto.noExistBakery();
+
+            FavoriteEntity favoriteEntity = favoriteRepository.findByBakeryNumberAndUserId(bakeryNumber, userId);
+            if (favoriteEntity == null) {
+                favoriteEntity = new FavoriteEntity(userId, bakeryNumber);
+                favoriteRepository.save(favoriteEntity);
+                bakeryEntity.increaseFavoriteCount();
+            } else {
+                favoriteRepository.delete(favoriteEntity);
+                bakeryEntity.decreaseFavoriteCount();
+            }
+
+            bakeryRepository.save(bakeryEntity);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PutFavoriteResponseDto.success();
     }
 
 }

@@ -5,6 +5,7 @@ import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponse
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetSearchBakeryListResponseDto;
 import com.jino.realbread.domain.favorite.dto.response.GetFavoriteListResponseDto;
+import com.jino.realbread.domain.favorite.dto.response.PutFavoriteResponseDto;
 
 import org.springframework.http.ResponseEntity;
 
@@ -19,4 +20,6 @@ public interface BakeryService {
     ResponseEntity<? super GetSearchBakeryListResponseDto> getSearchBakeryList(String searchWord, String preSearchWord);
 
     ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(Integer bakeryNumber);
+
+    ResponseEntity<? super PutFavoriteResponseDto> putFavorite(Integer bakeryNumber, Integer userId);
 }

@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class FavoriteEntity {
 
     @Id
-    private String userId;
+    private Integer userId;
     @Id
-    private int bakeryNumber;
+    private Integer bakeryNumber;
 }

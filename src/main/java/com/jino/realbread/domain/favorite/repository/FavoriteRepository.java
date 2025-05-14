@@ -13,7 +13,7 @@ import com.jino.realbread.domain.favorite.repository.resultSet.GetFavoriteListRe
 @Repository
 public interface FavoriteRepository extends JpaRepository<FavoriteEntity, FavoritePK> {
 
-    FavoriteEntity findByBakeryNumberAndUserEmail(Integer bakeryNumber, String userEmail);
+    FavoriteEntity findByBakeryNumberAndUserId(Integer bakeryNumber, Integer userId);
 
     @Query(value = "SELECT " +
             "U.id AS userId, " +

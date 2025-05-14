@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.jino.realbread.domain.favorite.dto.FavoriteListItem;
+import com.jino.realbread.domain.favorite.repository.resultSet.GetFavoriteListResultSet;
 import com.jino.realbread.global.common.ResponseCode;
 import com.jino.realbread.global.common.ResponseMessage;
 import com.jino.realbread.global.dto.response.ResponseDto;

@@ -1,6 +1,9 @@
 package com.jino.realbread.domain.favorite.dto;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.jino.realbread.domain.favorite.repository.resultSet.GetFavoriteListResultSet;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +19,7 @@ public class FavoriteListItem {
     private String profileImage;
 
     public FavoriteListItem(GetFavoriteListResultSet resultSet) {
-        this.email = resultSet.getEmail();
+        this.email = resultSet.getUserId();
         this.nickname = resultSet.getNickname();
         this.profileImage = resultSet.getProfileImage();
     }

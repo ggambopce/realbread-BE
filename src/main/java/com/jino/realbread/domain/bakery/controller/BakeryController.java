@@ -3,6 +3,7 @@ package com.jino.realbread.domain.bakery.controller;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMainListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
+import com.jino.realbread.domain.bakery.dto.response.GetSearchBakeryListResponseDto;
 import com.jino.realbread.domain.bakery.service.BakeryService;
 import com.jino.realbread.naverapi.NaverSearchService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,15 @@ public class BakeryController {
     @GetMapping("/main-list")
     public ResponseEntity<? super GetBakeryMainListResponseDto> getMainBakeryList() {
         return bakeryService.getMainBakeryList();
+    }
+
+    @GetMapping(value = { "/search-list/{searchWord}", "/search-list/{searchWord}/{preSearchWord}" })
+    public ResponseEntity<? super GetSearchBakeryListResponseDto> getSearchBakeryList(
+            @PathVariable("searchWord") String searchWord,
+            @PathVariable(value = "preSearchWord", required = false) String preSearchWord) {
+        ResponseEntity<? super GetSearchBakeryListResponseDto> response = bakeryService.getSearchBakeryList(searchWord,
+                preSearchWord);
+        return response;
     }
 
 }

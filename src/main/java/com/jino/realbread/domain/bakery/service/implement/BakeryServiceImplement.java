@@ -10,7 +10,10 @@ import com.jino.realbread.domain.bakery.repository.BakeryRepository;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryMainListItemResultSet;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryResultSet;
 import com.jino.realbread.domain.bakery.service.BakeryService;
+import com.jino.realbread.domain.search.entity.SearchLogEntity;
+import com.jino.realbread.domain.search.repository.SearchLogRepository;
 import com.jino.realbread.domain.view.BakeryListViewEntity;
+import com.jino.realbread.domain.view.repository.BakeryListViewRepository;
 import com.jino.realbread.global.dto.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,8 @@ import java.util.List;
 public class BakeryServiceImplement implements BakeryService {
 
     private final BakeryRepository bakeryRepository;
+    private final SearchLogRepository searchLogRepository;
+    private final BakeryListViewRepository bakeryListViewRepository;
 
     @Override
     public ResponseEntity<? super GetBakeryResponseDto> getBakery(Integer bakeryNumber) {
@@ -82,7 +87,8 @@ public class BakeryServiceImplement implements BakeryService {
         try {
 
             bakeryListViewEntities = bakeryListViewRepository
-                    .findByTitleContainsOrContentContainsOrderByWriteDatetimeDesc(searchWord, searchWord);
+                    .findByBakeryTitleContainsOrBakeryRoadAddressContainsOrBakeryAddressContainsOrMenuNameContains(
+                            searchWord, searchWord);
 
             SearchLogEntity searchLogEntity = new SearchLogEntity(searchWord, preSearchWord, false);
             searchLogRepository.save(searchLogEntity);

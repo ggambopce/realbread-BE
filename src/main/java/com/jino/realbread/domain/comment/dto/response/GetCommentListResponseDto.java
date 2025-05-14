@@ -2,6 +2,7 @@ package com.jino.realbread.domain.comment.dto.response;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.jino.realbread.domain.comment.dto.CommentListItem;
@@ -28,7 +29,7 @@ public class GetCommentListResponseDto extends ResponseDto {
     }
 
     public static ResponseEntity<ResponseDto> noExistBoard() {
-        ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_BOARD, ResponseMessage.NOT_EXISTED_BOARD);
+        ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_BAKERY, ResponseMessage.NOT_EXISTED_BAKERY);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 

@@ -1,18 +1,22 @@
 package com.jino.realbread.domain.bakery.service.implement;
 
+import com.jino.realbread.domain.bakery.dto.BakeryListItem;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMainListResponseDto;
 import com.jino.realbread.domain.bakery.repository.resultSet.BakeryMarkerListItem;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
+import com.jino.realbread.domain.bakery.dto.response.GetSearchBakeryListResponseDto;
 import com.jino.realbread.domain.bakery.repository.BakeryRepository;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryMainListItemResultSet;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryResultSet;
 import com.jino.realbread.domain.bakery.service.BakeryService;
+import com.jino.realbread.domain.view.BakeryListViewEntity;
 import com.jino.realbread.global.dto.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,7 +32,8 @@ public class BakeryServiceImplement implements BakeryService {
 
         try {
             resultSet = bakeryRepository.getBakery(bakeryNumber);
-            if (resultSet.isEmpty()) return GetBakeryResponseDto.noExistBakery();
+            if (resultSet.isEmpty())
+                return GetBakeryResponseDto.noExistBakery();
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -44,7 +49,8 @@ public class BakeryServiceImplement implements BakeryService {
 
         try {
             markerList = bakeryRepository.getRandomMarkerLimit100();
-            if (markerList.isEmpty()) return GetBakeryMarkerListResponseDto.noExistMarker();
+            if (markerList.isEmpty())
+                return GetBakeryMarkerListResponseDto.noExistMarker();
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
@@ -67,4 +73,31 @@ public class BakeryServiceImplement implements BakeryService {
         }
         return GetBakeryMainListResponseDto.success(resultSets);
     }
+
+    @Override
+    public ResponseEntity<? super GetSearchBakeryListResponseDto> getSearchBakeryList(String searchWord,
+            String preSearchWord) {
+        List<BakeryListViewEntity> bakeryListViewEntities = new ArrayList<>();
+
+        try {
+
+            bakeryListViewEntities = bakeryListViewRepository
+                    .findByTitleContainsOrContentContainsOrderByWriteDatetimeDesc(searchWord, searchWord);
+
+            SearchLogEntity searchLogEntity = new SearchLogEntity(searchWord, preSearchWord, false);
+            searchLogRepository.save(searchLogEntity);
+
+            boolean relation = preSearchWord != null;
+            if (relation) {
+                searchLogEntity = new SearchLogEntity(preSearchWord, searchWord, relation);
+                searchLogRepository.save(searchLogEntity);
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetSearchBakeryListResponseDto.success(bakeryListViewEntities);
+    }
+
 }

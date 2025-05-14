@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jino.realbread.domain.search.dto.GetPopularListResponseDto;
+import com.jino.realbread.domain.search.dto.GetRelationListResponseDto;
 import com.jino.realbread.domain.search.service.SearchService;
 
 import lombok.RequiredArgsConstructor;

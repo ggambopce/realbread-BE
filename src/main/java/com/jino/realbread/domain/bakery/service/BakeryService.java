@@ -4,16 +4,19 @@ import com.jino.realbread.domain.bakery.dto.response.GetBakeryMainListResponseDt
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetSearchBakeryListResponseDto;
+import com.jino.realbread.domain.favorite.dto.response.GetFavoriteListResponseDto;
 
 import org.springframework.http.ResponseEntity;
 
 public interface BakeryService {
 
-    ResponseEntity<? super GetBakeryResponseDto> getBakery(Integer BakeryNumber);
+    ResponseEntity<? super GetBakeryResponseDto> getBakery(Integer bakeryNumber);
 
     ResponseEntity<? super GetBakeryMarkerListResponseDto> getRandomMarkerList();
 
     ResponseEntity<? super GetBakeryMainListResponseDto> getMainBakeryList(String sort);
 
     ResponseEntity<? super GetSearchBakeryListResponseDto> getSearchBakeryList(String searchWord, String preSearchWord);
+
+    ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(Integer bakeryNumber);
 }

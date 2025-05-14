@@ -10,6 +10,9 @@ import com.jino.realbread.domain.bakery.repository.BakeryRepository;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryMainListItemResultSet;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryResultSet;
 import com.jino.realbread.domain.bakery.service.BakeryService;
+import com.jino.realbread.domain.favorite.dto.response.GetFavoriteListResponseDto;
+import com.jino.realbread.domain.favorite.repository.FavoriteRepository;
+import com.jino.realbread.domain.favorite.repository.resultSet.GetFavoriteListResultSet;
 import com.jino.realbread.domain.search.entity.SearchLogEntity;
 import com.jino.realbread.domain.search.repository.SearchLogRepository;
 import com.jino.realbread.domain.view.BakeryListViewEntity;
@@ -29,6 +32,7 @@ public class BakeryServiceImplement implements BakeryService {
     private final BakeryRepository bakeryRepository;
     private final SearchLogRepository searchLogRepository;
     private final BakeryListViewRepository bakeryListViewRepository;
+    private final FavoriteRepository favoriteRepository;
 
     @Override
     public ResponseEntity<? super GetBakeryResponseDto> getBakery(Integer bakeryNumber) {
@@ -114,6 +118,26 @@ public class BakeryServiceImplement implements BakeryService {
             return ResponseDto.databaseError();
         }
         return GetSearchBakeryListResponseDto.success(bakeryListViewEntities);
+    }
+
+    @Override
+    public ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(Integer bakeryNumber) {
+
+        List<GetFavoriteListResultSet> resultSets = new ArrayList<>();
+
+        try {
+
+            boolean existedBakery = bakeryRepository.existsByBakeryId(bakeryNumber);
+            if (!existedBakery)
+                return GetFavoriteListResponseDto.noExistBakery();
+
+            resultSets = favoriteRepository.getFavoriteList(bakeryNumber);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetFavoriteListResponseDto.success(resultSets);
     }
 
 }

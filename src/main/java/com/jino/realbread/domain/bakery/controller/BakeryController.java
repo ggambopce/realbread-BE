@@ -5,6 +5,7 @@ import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponse
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetSearchBakeryListResponseDto;
 import com.jino.realbread.domain.bakery.service.BakeryService;
+import com.jino.realbread.domain.favorite.dto.response.GetFavoriteListResponseDto;
 import com.jino.realbread.naverapi.NaverSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +39,8 @@ public class BakeryController {
     }
 
     @GetMapping("/main-list")
-    public ResponseEntity<? super GetBakeryMainListResponseDto> getMainBakeryList() {
-        return bakeryService.getMainBakeryList();
+    public ResponseEntity<? super GetBakeryMainListResponseDto> getMainBakeryList(String sort) {
+        return bakeryService.getMainBakeryList(sort);
     }
 
     @GetMapping(value = { "/search-list/{searchWord}", "/search-list/{searchWord}/{preSearchWord}" })
@@ -48,6 +49,13 @@ public class BakeryController {
             @PathVariable(value = "preSearchWord", required = false) String preSearchWord) {
         ResponseEntity<? super GetSearchBakeryListResponseDto> response = bakeryService.getSearchBakeryList(searchWord,
                 preSearchWord);
+        return response;
+    }
+
+    @GetMapping("/{bakeryNumber}/favorite-list")
+    public ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(
+            @PathVariable("bakeryNumber") Integer bakeryNumber) {
+        ResponseEntity<? super GetFavoriteListResponseDto> response = bakeryService.getFavoriteList(bakeryNumber);
         return response;
     }
 

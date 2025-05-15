@@ -6,9 +6,11 @@ import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetSearchBakeryListResponseDto;
 import com.jino.realbread.domain.bakery.service.BakeryService;
 import com.jino.realbread.domain.favorite.dto.response.GetFavoriteListResponseDto;
+import com.jino.realbread.domain.favorite.dto.response.PutFavoriteResponseDto;
 import com.jino.realbread.naverapi.NaverSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -39,8 +41,16 @@ public class BakeryController {
     }
 
     @GetMapping("/main-list")
-    public ResponseEntity<? super GetBakeryMainListResponseDto> getMainBakeryList(String sort) {
+    public ResponseEntity<? super GetBakeryMainListResponseDto> getMainBakeryList(
+            @RequestParam(value = "sort", required = false, defaultValue = "") String sort) {
         return bakeryService.getMainBakeryList(sort);
+    }
+
+    @PutMapping("/{boardNumber}/favorite")
+    public ResponseEntity<? super PutFavoriteResponseDto> putFavorite(@PathVariable("boardNumber") Integer boardNumber,
+            @AuthenticationPrincipal Integer userId) {
+        ResponseEntity<? super PutFavoriteResponseDto> response = bakeryService.putFavorite(boardNumber, userId);
+        return response;
     }
 
     @GetMapping(value = { "/search-list/{searchWord}", "/search-list/{searchWord}/{preSearchWord}" })

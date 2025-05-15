@@ -52,10 +52,13 @@ public class GetBakeryMainListResponseDto extends ResponseDto {
             BakerySummary summary = new BakerySummary(
                     first.getBakeryNumber(),
                     first.getTitle(),
+                    first.getRoadAddress(),
                     first.getFavoriteCount(),
                     first.getCommentCount(),
-                    menuList
-            );
+                    first.getLink(),
+                    first.getMapx(),
+                    first.getMapy(),
+                    menuList);
 
             mainBakeryList.add(summary);
         }
@@ -70,8 +73,12 @@ public class GetBakeryMainListResponseDto extends ResponseDto {
     public static class BakerySummary {
         private Integer bakeryNumber;
         private String title;
+        private String roadAddress;
         private Integer favoriteCount;
         private Integer commentCount;
+        private String link;
+        private String mapx;
+        private String mapy;
         private List<MenuListItem> menuList;
     }
 

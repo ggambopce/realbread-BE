@@ -14,10 +14,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FavoritePK implements Serializable {
 
-    @Column(name = "user_email")
-    private String userEmail;
+    @Column(name = "user_id")
+    private int userId;
 
-    @Column(name = "board_number")
-    private int boardNumber;
+    @Column(name = "bakery_number")
+    private int bakeryNumber;
 
 }

@@ -46,6 +46,10 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
                         "SELECT " +
                         "b.id AS bakeryNumber, " +
                         "b.title AS title, " +
+                        "b.road_address AS roadAddress, " +
+                        "b.mapx / 10000000.0 AS mapx, " +
+                        "b.mapy / 10000000.0 AS mapy, " +
+                        "b.link AS link, " +
                         "b.favorite_count AS favoriteCount, " +
                         "b.comment_count AS commentCount, " +
                         "m.id AS menuNumber, " +
@@ -61,7 +65,49 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
 
         boolean existsByBakeryId(Integer bakeryNumber);
 
-        List<GetBakeryMainListItemResultSet> getBakeryMainListOrderByReviewCount();
+        @Query(value = """
+                        SELECT *
+                        FROM (
+                                SELECT
+                                b.id AS bakeryNumber,
+                                b.title AS title,
+                                b.road_address AS roadAddress,
+                                b.mapx / 10000000.0 AS mapx,
+                                b.mapy / 10000000.0 AS mapy,
+                                b.link AS link,
+                                b.favorite_count AS favoriteCount,
+                                b.comment_count AS commentCount,
+                                m.id AS menuNumber,
+                                m.image_url AS imageUrl,
+                                ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY m.id) AS rn
+                                FROM bakery b
+                                LEFT JOIN menu m ON b.id = m.bakery_number
+                        ) ranked
+                        WHERE rn <= 4
+                        ORDER BY commentCount DESC
+                        """, nativeQuery = true)
+        List<GetBakeryMainListItemResultSet> getBakeryMainListOrderByCommentCount();
 
+        @Query(value = """
+                        SELECT *
+                        FROM (
+                                SELECT
+                                b.id AS bakeryNumber,
+                                b.title AS title,
+                                b.road_address AS roadAddress,
+                                b.mapx / 10000000.0 AS mapx,
+                                b.mapy / 10000000.0 AS mapy,
+                                b.link AS link,
+                                b.favorite_count AS favoriteCount,
+                                b.comment_count AS commentCount,
+                                m.id AS menuNumber,
+                                m.image_url AS imageUrl,
+                                ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY m.id) AS rn
+                                FROM bakery b
+                                LEFT JOIN menu m ON b.id = m.bakery_number
+                        ) ranked
+                        WHERE rn <= 4
+                        ORDER BY favoriteCount DESC
+                        """, nativeQuery = true)
         List<GetBakeryMainListItemResultSet> getBakeryMainListOrderByFavoriteCount();
 }

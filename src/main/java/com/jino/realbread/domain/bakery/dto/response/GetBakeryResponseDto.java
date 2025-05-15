@@ -4,7 +4,6 @@ import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryResultSet;
 import com.jino.realbread.global.common.ResponseCode;
 import com.jino.realbread.global.common.ResponseMessage;
 import com.jino.realbread.global.dto.response.ResponseDto;
-import com.jino.realbread.menu.Menu;
 import com.jino.realbread.menu.dto.MenuListItem;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -40,8 +39,7 @@ public class GetBakeryResponseDto extends ResponseDto {
                     row.getMenuName(),
                     row.getPrice(),
                     row.getImageUrl(),
-                    row.getDescription()
-            );
+                    row.getDescription());
             menuList.add(item);
         }
         this.menuList = menuList;

@@ -19,8 +19,8 @@ import lombok.NoArgsConstructor;
 public class BakeryListViewEntity {
 
     @Id
-    @Column(name = "menu_id")
-    private Integer menuId;
+    @Column(name = "bakery_list_view_id") // ← 새로 만든 row 번호
+    private Integer id;
 
     // Bakery 정보
     @Column(name = "bakery_id")
@@ -54,6 +54,9 @@ public class BakeryListViewEntity {
     private int bakeryCommentCount;
 
     // Menu 정보
+    @Column(name = "menu_id")
+    private Integer menuId;
+
     @Column(name = "menu_name")
     private String menuName;
 

@@ -46,7 +46,7 @@ public class WebSecurityConfig {
                                                                 "/api/test", "/api/test/client-chat")
                                                 .permitAll()
                                                 .requestMatchers("/", "/api/auth/**", "/api/search/**", "/oauth2/**",
-                                                                "/api/bakery/**",
+                                                                "/api/bakery/**", "/api/bakery/search-list/**",
                                                                 "/file/**")
                                                 .permitAll()
                                                 .requestMatchers(HttpMethod.GET, "/api/bakery/**", "/api/user/*")

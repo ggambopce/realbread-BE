@@ -82,7 +82,7 @@ public class BakeryServiceImplement implements BakeryService {
 
             switch (sort) {
                 case "review":
-                    resultSets = bakeryRepository.getBakeryMainListOrderByReviewCount();
+                    resultSets = bakeryRepository.getBakeryMainListOrderByCommentCount();
                     break;
                 case "favorite":
                     resultSets = bakeryRepository.getBakeryMainListOrderByFavoriteCount();
@@ -106,8 +106,8 @@ public class BakeryServiceImplement implements BakeryService {
         try {
 
             bakeryListViewEntities = bakeryListViewRepository
-                    .findByBakeryTitleContainsOrBakeryRoadAddressContainsOrBakeryAddressContainsOrMenuNameContains(
-                            searchWord, searchWord);
+                    .getSearchByBakeryTitleOrBakeryAddress(
+                            searchWord);
 
             SearchLogEntity searchLogEntity = new SearchLogEntity(searchWord, preSearchWord, false);
             searchLogRepository.save(searchLogEntity);

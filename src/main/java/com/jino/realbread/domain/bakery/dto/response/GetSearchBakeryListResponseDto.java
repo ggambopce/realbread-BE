@@ -11,6 +11,9 @@ import com.jino.realbread.global.common.ResponseCode;
 import com.jino.realbread.global.common.ResponseMessage;
 import com.jino.realbread.global.dto.response.ResponseDto;
 
+import lombok.Getter;
+
+@Getter
 public class GetSearchBakeryListResponseDto extends ResponseDto {
 
     private List<BakeryListItem> searchList;

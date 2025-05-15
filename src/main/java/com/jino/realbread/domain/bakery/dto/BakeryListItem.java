@@ -1,8 +1,12 @@
 package com.jino.realbread.domain.bakery.dto;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 import com.jino.realbread.domain.view.BakeryListViewEntity;
+import com.jino.realbread.menu.dto.MenuListItem;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,13 +29,10 @@ public class BakeryListItem {
     private int bakeryFavoriteCount;
     private int bakeryCommentCount;
 
-    // Menu 정보
-    private Integer menuId;
-    private String menuName;
-    private String menuPrice;
-    private String menuImageUrl;
-    private String menuDescription;
+    // 메뉴 리스트
+    private List<MenuListItem> menuList = new ArrayList<>();
 
+    // Bakery 정보만 초기화하는 생성자
     public BakeryListItem(BakeryListViewEntity entity) {
         this.bakeryId = entity.getBakeryId();
         this.bakeryTitle = entity.getBakeryTitle();
@@ -43,22 +44,34 @@ public class BakeryListItem {
         this.bakeryMapy = entity.getBakeryMapy();
         this.bakeryFavoriteCount = entity.getBakeryFavoriteCount();
         this.bakeryCommentCount = entity.getBakeryCommentCount();
-
-        this.menuId = entity.getMenuId();
-        this.menuName = entity.getMenuName();
-        this.menuPrice = entity.getMenuPrice();
-        this.menuImageUrl = entity.getMenuImageUrl();
-        this.menuDescription = entity.getMenuDescription();
     }
 
-    // 리스트 변환 유틸
-    public static List<BakeryListItem> getList(List<BakeryListViewEntity> entities) {
+    // 메뉴 추가 메서드
+    public void addMenu(BakeryListViewEntity entity) {
+        this.menuList.add(new MenuListItem(
+                entity.getMenuId(),
+                entity.getMenuName(),
+                entity.getMenuPrice(),
+                entity.getMenuDescription(),
+                entity.getMenuImageUrl()));
+    }
 
-        List<BakeryListItem> list = new ArrayList<>();
-        for (BakeryListViewEntity bakeryListViewEntity : entities) {
-            BakeryListItem boBakeryListItem = new BakeryListItem(bakeryListViewEntity);
-            list.add(boBakeryListItem);
+    // Bakery ID 기준으로 중복 제거 및 메뉴 통합
+    public static List<BakeryListItem> getList(List<BakeryListViewEntity> entities) {
+        Map<Integer, BakeryListItem> bakeryMap = new LinkedHashMap<>();
+
+        for (BakeryListViewEntity entity : entities) {
+            Integer bakeryId = entity.getBakeryId();
+            BakeryListItem item = bakeryMap.get(bakeryId);
+
+            if (item == null) {
+                item = new BakeryListItem(entity);
+                bakeryMap.put(bakeryId, item);
+            }
+
+            item.addMenu(entity);
         }
-        return list;
+
+        return new ArrayList<>(bakeryMap.values());
     }
 }

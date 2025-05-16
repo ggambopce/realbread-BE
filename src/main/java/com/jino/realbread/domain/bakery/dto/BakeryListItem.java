@@ -29,7 +29,7 @@ public class BakeryListItem {
     private int bakeryFavoriteCount;
     private int bakeryCommentCount;
 
-    // 메뉴 리스트
+    // 메뉴 리스트(상세, 검색 모두 사용)
     private List<MenuListItem> menuList = new ArrayList<>();
 
     // Bakery 정보만 초기화하는 생성자

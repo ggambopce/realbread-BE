@@ -40,23 +40,24 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
                         "LIMIT 100 ", nativeQuery = true)
         List<BakeryMarkerListItem> getRandomMarkerLimit100();
 
-        @Query(value = "SELECT " +
-                        "* " +
+        @Query(value = "SELECT * " +
                         "FROM ( " +
-                        "SELECT " +
-                        "b.id AS bakeryNumber, " +
-                        "b.title AS title, " +
-                        "b.road_address AS roadAddress, " +
-                        "b.mapx / 10000000.0 AS mapx, " +
-                        "b.mapy / 10000000.0 AS mapy, " +
-                        "b.link AS link, " +
-                        "b.favorite_count AS favoriteCount, " +
-                        "b.comment_count AS commentCount, " +
-                        "m.id AS menuNumber, " +
-                        "m.image_url AS imageUrl, " +
-                        "ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY m.id) AS rn " +
-                        "FROM bakery b " +
-                        "LEFT JOIN menu m ON b.id = m.bakery_number " +
+                        "    SELECT " +
+                        "        b.id AS bakeryNumber, " +
+                        "        b.title AS title, " +
+                        "        b.road_address AS roadAddress, " +
+                        "        b.mapx / 10000000.0 AS mapx, " +
+                        "        b.mapy / 10000000.0 AS mapy, " +
+                        "        b.link AS link, " +
+                        "        b.favorite_count AS favoriteCount, " +
+                        "        b.comment_count AS commentCount, " +
+                        "        m.id AS menuNumber, " +
+                        "        m.image_url AS imageUrl, " +
+                        "        ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY m.id) AS rn " +
+                        "    FROM ( " +
+                        "        SELECT * FROM bakery ORDER BY RAND() LIMIT 100 " +
+                        "    ) b " +
+                        "    LEFT JOIN menu m ON b.id = m.bakery_number " +
                         ") ranked " +
                         "WHERE rn <= 4", nativeQuery = true)
         List<GetBakeryMainListItemResultSet> getBakeryMainList();

@@ -2,6 +2,8 @@ package com.jino.realbread.domain.eduBot.chatgpt;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jino.realbread.domain.eduBot.dto.ChatEmotionResponse;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -21,7 +23,7 @@ public class PromptChatService {
 
     private static final String MODEL = "gpt-3.5-turbo";
 
-    public String counselTextResponse(String message) {
+    public ChatEmotionResponse counselTextResponse(String message) {
         if (message == null || message.isBlank()) {
             throw new IllegalArgumentException("상담 질문이 비어 있습니다.");
         }
@@ -38,9 +40,7 @@ public class PromptChatService {
             String requestJson = objectMapper.writeValueAsString(Map.of(
                     "model", MODEL,
                     "messages", List.of(
-                            Map.of("role", "user", "content", renderedPrompt)
-                    )
-            ));
+                            Map.of("role", "user", "content", renderedPrompt))));
 
             // 4. WebClient로 OpenAI API 호출
             String responseBody = openAiWebClient.post()
@@ -58,7 +58,9 @@ public class PromptChatService {
             JsonNode root = objectMapper.readTree(responseBody);
             JsonNode contentNode = root.path("choices").get(0).path("message").path("content");
 
-            return contentNode.asText("GPT 응답이 비어 있음");
+            // contentNode는 JSON String을 담고 있음. 다시 파싱해야 함.
+            String contentJson = contentNode.asText();
+            return objectMapper.readValue(contentJson, ChatEmotionResponse.class);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,41 +69,23 @@ public class PromptChatService {
     }
 
     private static final String PROMPT_TEMPLATE = """
-        핵심 목표:
-        * 행동의 문제점 명확히 인식: 당신의 행동은 잘못입니다.
-        * 행동이 잘못되었다는 기준은 남에게 피해를 준 것입니다.
-        * 결과에 대한 책임감 강조: 당신의 행동 때문에 피해를 본 사람이 있습니다.
-        * 바람직한 행동 촉구: 다음부터 어떻게 해야 할까요?
 
-        자기 성찰 유도 프롬프트:
-        1. 행동 인식 및 명칭 부여:
-        * "당신이 지금 한 일은 무엇인가요?"
-        * "그 행동 때문에 누군가 불편하거나 피해를 보지 않았나요?"
-        * "하고 싶은 대로 하는 것과 해도 되는 일은 어떻게 다를까요?"
-        * "당신의 행동은 단순한 장난인가요, 아니면 다른 사람에게 피해를 주는 잘못인가요? 왜 그렇게 생각하나요?"
+            챗봇 설계 시 고려 사항:
+            * 명확하고 정확한 정보 전달
+            * 간결한 문장
+            * 대전 자랑을 꼭 포함
+            * 빵이 많고 노잼도시가 아님을 강조
+            * 긍정과 유머러스한 상담
 
-        2. 결과 및 영향 생각하기:
-        * "당신의 행동 때문에 당신은 무엇을 놓쳤나요?"
-        * "다른 학생들은 당신 때문에 어떻게 되었나요?"
-        * "선생님은 왜 당신에게 이야기했을까요?"
-        * "만약 다른 사람이 똑같이 행동한다면 당신 기분은 어떨까요?"
-        * "이런 행동이 계속되면 어떻게 될까요?"
+            응답 형식 (JSON):
+            다음 형식으로 대답해 주세요. 응답만 출력하세요. 감정(emotion)은 아래에서 선택하세요.
 
-        3. 책임 및 개선 방안 모색:
-        * "이 결과에 대해 당신은 어떤 책임을 져야 할까요?"
-        * "다음에 똑같이 하고 싶을 때는 어떻게 해야 할까요?"
-        * "다른 사람에게 피해를 주지 않으려면 어떻게 해야 할까요?"
-        * "선생님이 제대로 수업하도록 당신은 어떻게 도울 수 있을까요?"
-        * "화나거나 답답할 때, 다른 사람에게 피해 주지 않고 당신의 감정을 표현하는 방법은 무엇일까요?"
+            "response": 실제 상담 메시지를 이곳에 작성(문장 형태),
+            "emotion": 반드시 아래 목록중 하나의 감정과 정확하게 일치해야 함
 
-        챗봇 설계 시 고려 사항:
-        * 명확하고 직설적인 표현
-        * 간결한 문장
-        * 질문 형식 유지
-        * 부정적인 결과에 대한 암시
-        * 긍정적인 변화에 대한 기대
+            Emotion Enum 목록:
+            거부, 고민중, 그건아니지화남, 긍적긍적미안, 기대만발, 기본스마일, 나센스있는데, 나짜증, 나황당, 난감한표정, 너무미안, 너무좋아사랑, 놀래키기, 누군가를좋아함, 달콤하고맛있어, 덜덜무서움, 따봉좋아, 땀삐질당황, 똑똑이, 미안, 바램, 뿌뿌신난다, 삐짐슬픔, 사랑고백하트, 생일축하, 손가락비난, 수줍은안녕, 수줍은웃음, 수줍은하트, 수줍은헤벌레사랑, 싫어, 심각한고민, 싸우고싶은화남, 싸우자, 안녕, 오궁금, 요리시작, 요리중, 우거절비난, 우쭐나최고, 위험해멈춰, 유혹, 으악걱정돼, 자아도취, 졸림, 좋은아이디어, 집중해, 찾는중, 키득키득, 한잔해, 헤벌레사랑에빠짐, 화나는데들어봄, 훌쩍슬픔
 
-        [질문]
-        {question}
-        """;
+            질문: $question$
+                        """;
 }

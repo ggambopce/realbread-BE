@@ -1,5 +1,6 @@
 package com.jino.realbread.domain.eduBot.controller;
 
+import com.jino.realbread.domain.eduBot.dto.ChatEmotionAudioResponse;
 import com.jino.realbread.domain.eduBot.service.CounselService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -22,16 +23,17 @@ public class eduBotController {
     @PostMapping(value = "/counsel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> processCounsel(@RequestParam("audioFile") MultipartFile audioFile) {
 
-        System.out.println("audioFile: " + audioFile); // null인지 확인
-        if (audioFile == null) throw new RuntimeException("파일이 null입니다");
+        if (audioFile == null)
+            throw new RuntimeException("파일이 null입니다");
 
-        byte[] audioBytes = counselService.processCounsel(audioFile);
+        ChatEmotionAudioResponse response = counselService.processCounsel(audioFile);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // 혹은 MediaType.valueOf("audio/webm")
-        headers.setContentLength(audioBytes.length);
-        headers.set("Content-Disposition", "attachment; filename=\"response.mp3\""); // 클라이언트 저장시 이름
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentLength(response.getAudio().length);
+        headers.set("Content-Disposition", "attachment; filename=\"response.mp3\"");
+        headers.set("Emotion", response.getEmotion().name());
 
-        return new ResponseEntity<>(audioBytes, headers, HttpStatus.OK);
+        return new ResponseEntity<>(response.getAudio(), headers, HttpStatus.OK);
     }
 }

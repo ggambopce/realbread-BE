@@ -15,7 +15,8 @@ public class UserEntity {
 
     @Id
     @GeneratedValue
-    private Long id;
+    @Column(name = "id")
+    private Long userId;
 
     private String oauthId;
 
@@ -41,9 +42,7 @@ public class UserEntity {
                 dto.getEmail(),
                 dto.getNickname(),
                 dto.getProfileImage(),
-                Role.ROLE_USER
-        );
+                Role.ROLE_USER);
     }
 
 }
-

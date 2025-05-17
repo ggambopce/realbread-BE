@@ -23,7 +23,7 @@ public class PrincipalDetails implements UserDetails {
     // 필요한 메서드들 구현
     @Override
     public String getUsername() {
-        return String.valueOf(userEntity.getUserId());
+        return userEntity.getEmail();
     }
 
     @Override

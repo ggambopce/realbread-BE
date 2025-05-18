@@ -4,12 +4,12 @@ import com.jino.realbread.domain.user.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    Optional<UserEntity> findByOauthId(String oauthId);
+    UserEntity findByOauthId(String oauthId);
 
     boolean existsById(Integer userId);
+
+    UserEntity finaByUserEmail(String email);
 }

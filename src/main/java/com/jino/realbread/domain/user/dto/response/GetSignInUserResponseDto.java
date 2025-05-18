@@ -2,6 +2,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.jino.realbread.domain.user.dto.SignInUserDto;
+import com.jino.realbread.domain.user.entity.Role;
 import com.jino.realbread.domain.user.entity.UserEntity;
 import com.jino.realbread.global.common.ResponseCode;
 import com.jino.realbread.global.common.ResponseMessage;
@@ -16,13 +17,20 @@ public class GetSignInUserResponseDto extends ResponseDto {
     private String email;
     private String nickname;
     private String profileImage;
+    private Role role;
 
-    public GetSignInUserResponseDto(SignInUserDto user) {
+    public GetSignInUserResponseDto(UserEntity user) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
         this.userId = user.getUserId();
         this.email = user.getEmail();
         this.nickname = user.getNickname();
         this.profileImage = user.getProfileImage();
+        this.role = Role.ROLE_USER;
+    }
+
+    public static ResponseEntity<GetSignInUserResponseDto> success(UserEntity user) {
+        GetSignInUserResponseDto result = new GetSignInUserResponseDto(user);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     public static ResponseEntity<ResponseDto> noExistUser() {

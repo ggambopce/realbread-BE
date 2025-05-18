@@ -3,6 +3,7 @@ package com.jino.realbread.global.security.filter;
 import com.jino.realbread.domain.user.entity.Role;
 import com.jino.realbread.domain.user.entity.UserEntity;
 import com.jino.realbread.domain.user.repository.UserRepository;
+import com.jino.realbread.global.security.auth.PrincipalDetails;
 import com.jino.realbread.global.security.provider.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -43,26 +44,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            String userId = jwtProvider.validate(token);
-
-            if (userId == null) {
+            String email = jwtProvider.validate(token);
+            if (email == null) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
-            Long id = Long.parseLong(userId);
-            UserEntity userEntity = userRepository.findById(id).orElseThrow();
+            UserEntity userEntity = userRepository.findByEmail(email);
+            if (userEntity == null) {
+                filterChain.doFilter(request, response);
+                return;
+            }
             Role role = userEntity.getRole(); // role : ROLE_USER, ROLE_ADMIN
 
             List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(role.name());
-            AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, null,
+            PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
+
+            AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principalDetails,
+                    null,
                     authorities);
 
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
             securityContext.setAuthentication(authenticationToken);
-
             SecurityContextHolder.setContext(securityContext);
 
         } catch (Exception exception) {

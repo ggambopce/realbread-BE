@@ -1,6 +1,10 @@
 package com.jino.realbread.global.oauth.entity;
 
 import com.jino.realbread.domain.user.entity.UserEntity;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -8,17 +12,14 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.Collection;
 import java.util.Map;
 
+@AllArgsConstructor
 public class CustomOAuth2User implements OAuth2User {
 
     private final UserEntity user;
 
-    public CustomOAuth2User(UserEntity user) {
-        this.user = user;
-    }
-
     @Override
     public Map<String, Object> getAttributes() {
-        return Map.of("id", user.getId());
+        return Map.of("email", user.getEmail());
     }
 
     @Override
@@ -28,7 +29,7 @@ public class CustomOAuth2User implements OAuth2User {
 
     @Override
     public String getName() {
-        return user.getId().toString();
+        return user.getEmail();
     }
 
     public UserEntity getUser() {

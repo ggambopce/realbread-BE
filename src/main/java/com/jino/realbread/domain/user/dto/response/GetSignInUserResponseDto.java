@@ -1,17 +1,17 @@
+package com.jino.realbread.domain.user.dto.response;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.jino.realbread.domain.user.dto.SignInUserDto;
 import com.jino.realbread.domain.user.entity.Role;
 import com.jino.realbread.domain.user.entity.UserEntity;
 import com.jino.realbread.global.common.ResponseCode;
 import com.jino.realbread.global.common.ResponseMessage;
 import com.jino.realbread.global.dto.response.ResponseDto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
+@Getter
 public class GetSignInUserResponseDto extends ResponseDto {
     private Long userId;
     private String email;

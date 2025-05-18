@@ -37,7 +37,7 @@ public class CommentServiceImplement implements CommentService {
             if (bakeryEntity == null)
                 return PostCommentResponseDto.noExistBakery();
 
-            boolean existedUser = userRepository.existsById(userId);
+            boolean existedUser = userRepository.existsByUserId(userId);
             if (!existedUser)
                 return PostCommentResponseDto.noExistUser();
 

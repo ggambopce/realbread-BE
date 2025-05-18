@@ -150,7 +150,7 @@ public class BakeryServiceImplement implements BakeryService {
 
         try {
 
-            boolean existedUser = userRepository.existsById(userId);
+            boolean existedUser = userRepository.existsByUserId(userId);
             if (!existedUser)
                 return PutFavoriteResponseDto.noExistUser();
 

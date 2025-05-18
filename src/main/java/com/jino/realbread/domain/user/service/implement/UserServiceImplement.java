@@ -23,9 +23,9 @@ public class UserServiceImplement implements UserService {
 
         UserEntity userEntity = null;
         try {
-            Stirng email = principalDetails.getUserEntity().getEmail();
+            String email = principalDetails.getUserEntity().getEmail();
 
-            userEntity = userRepository.finaByEmail(email);
+            userEntity = userRepository.findByEmail(email);
             if (userEntity == null)
                 return GetSignInUserResponseDto.noExistUser();
 

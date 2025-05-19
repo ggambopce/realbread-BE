@@ -4,6 +4,8 @@ import com.jino.realbread.domain.bakery.repository.resultSet.BakeryMarkerListIte
 import com.jino.realbread.domain.bakery.entity.Bakery;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryMainListItemResultSet;
 import com.jino.realbread.domain.bakery.repository.resultSet.GetBakeryResultSet;
+import com.jino.realbread.menu.crawler.BakeryCrawlDto;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -25,9 +27,9 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
                         "M.description AS description, " +
                         "M.image_url AS imageUrl " +
                         "FROM bakery AS B " +
-                        "INNER JOIN menu AS M " +
+                        "LEFT JOIN menu AS M " +
                         "ON B.id = M.bakery_number " +
-                        "WHERE M.bakery_number = ?1 ", nativeQuery = true)
+                        "WHERE B.id = ?1 ", nativeQuery = true)
         List<GetBakeryResultSet> getBakery(Integer boardNumber);
 
         @Query(value = "SELECT " +
@@ -111,4 +113,13 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
                         ORDER BY favoriteCount DESC
                         """, nativeQuery = true)
         List<GetBakeryMainListItemResultSet> getBakeryMainListOrderByFavoriteCount();
+
+        @Query(value = """
+                        SELECT
+                        b.id,
+                        b.name,
+                        b.address
+                        FROM Bakery b
+                        """, nativeQuery = true)
+        List<BakeryCrawlDto> findAllForCrawling();
 }

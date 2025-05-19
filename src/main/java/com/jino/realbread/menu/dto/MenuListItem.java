@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MenuListItem {
 
-    private int menuNumber;
+    private Integer menuNumber;
     private String menuName;
     private String price;
     private String description;

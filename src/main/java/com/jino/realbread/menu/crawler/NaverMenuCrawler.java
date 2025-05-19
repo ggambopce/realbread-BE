@@ -1,4 +1,4 @@
-package com.jino.realbread.menu;
+package com.jino.realbread.menu.crawler;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 
+import com.jino.realbread.menu.MenuDto;
+
 import java.net.URLEncoder;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.List;
 @Component
 public class NaverMenuCrawler {
 
-    public List<MenuDto> crawl(String keyword) {
+    public List<MenuDto> crawl(BakeryCrawlDto dto) {
         WebDriverManager.chromedriver().setup();
 
         ChromeOptions options = new ChromeOptions();
@@ -26,11 +28,11 @@ public class NaverMenuCrawler {
         List<MenuDto> result = new ArrayList<>();
 
         JavascriptExecutor js = (JavascriptExecutor) driver;
-
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
         try {
             // 검색어로 지도 검색 페이지 열기
+            String keyword = dto.getName() + " " + dto.getAddress();
             String url = "https://map.naver.com/v5/search/" + URLEncoder.encode(keyword, "UTF-8");
             driver.get(url);
             Thread.sleep(3000); // 초기 로딩 대기
@@ -43,8 +45,7 @@ public class NaverMenuCrawler {
 
             // 가게 이름 요소들 가져오기 (텍스트 기반 안전한 셀렉터)
             List<WebElement> shopLinks = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
-                    By.cssSelector("div.place_bluelink>.TYaxT, div.place_bluelink>span.YwYLL")
-            ));
+                    By.cssSelector("div.place_bluelink>.TYaxT, div.place_bluelink>span.YwYLL")));
 
             if (shopLinks.isEmpty()) {
                 System.out.println("가게 항목 없음");
@@ -95,7 +96,7 @@ public class NaverMenuCrawler {
                 }
             }
 
-            //메뉴 크롤링
+            // 메뉴 크롤링
             System.out.println("메뉴 크롤링 시작");
 
             List<WebElement> menuElements = driver.findElements(By.cssSelector("div.place_section_content ul li"));

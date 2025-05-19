@@ -25,5 +25,5 @@ public class Menu {
     private String imageUrl;
     private String description;
 
-    private int bakeryNumber;
+    private Integer bakeryId;
 }

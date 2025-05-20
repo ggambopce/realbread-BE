@@ -63,10 +63,10 @@ public class BakeryListViewEntity {
     @Column(name = "menu_price")
     private String menuPrice;
 
-    @Column(name = "menu_image_url")
-    private String menuImageUrl;
-
     @Column(name = "menu_description", length = 2000)
     private String menuDescription;
+
+    @Column(name = "menu_image_url")
+    private String menuImageUrl;
 
 }

@@ -38,8 +38,8 @@ public class GetBakeryResponseDto extends ResponseDto {
                     row.getMenuNumber(),
                     row.getMenuName(),
                     row.getPrice(),
-                    row.getImageUrl(),
-                    row.getDescription());
+                    row.getDescription(),
+                    row.getImageUrl());
             menuList.add(item);
         }
         this.menuList = menuList;

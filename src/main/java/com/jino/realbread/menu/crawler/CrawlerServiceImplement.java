@@ -26,15 +26,13 @@ public class CrawlerServiceImplement implements CrawlerService {
         List<BakeryCrawlDto> bakeryList = bakeryRepository.findAllForCrawling(); // name, address 포함
 
         int crawlCount = 0;
-        final int MAX_CRAWL = 3;
+        final int MAX_CRAWL = 20;
 
         for (BakeryCrawlDto bakery : bakeryList) {
             if (crawlCount >= MAX_CRAWL) {
                 System.out.println("최대 크롤링 개수 도달: 종료");
                 break;
             }
-
-            crawlCount++; // 저장 성공 시만 증가
 
             // 이미 메뉴가 있는 빵집은 스킵
             boolean exists = menuRepository.existsByBakeryId(bakery.getBakeryId());
@@ -64,6 +62,7 @@ public class CrawlerServiceImplement implements CrawlerService {
                         .toList();
 
                 menuRepository.saveAll(menuEntities);
+                crawlCount++; // 저장 성공 시만 증가
 
                 System.out.println("저장 완료: " + bakery.getTitle() + " (" + menuEntities.size() + "개)");
 

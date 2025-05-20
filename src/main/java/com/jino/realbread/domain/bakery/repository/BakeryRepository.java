@@ -116,10 +116,10 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
 
         @Query(value = """
                         SELECT
-                        b.id,
-                        b.name,
-                        b.address
-                        FROM Bakery b
+                        b.id AS bakeryId,
+                        b.title AS title,
+                        b.address AS address
+                        FROM bakery b
                         """, nativeQuery = true)
         List<BakeryCrawlDto> findAllForCrawling();
 }

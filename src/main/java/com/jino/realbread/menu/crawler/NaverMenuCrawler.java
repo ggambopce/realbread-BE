@@ -31,104 +31,77 @@ public class NaverMenuCrawler {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
         try {
-            // 검색어로 지도 검색 페이지 열기
-            String keyword = dto.getName() + " " + dto.getAddress();
+            // 1. 검색 페이지 접근
+            String keyword = dto.getTitle() + " 대전";
             String url = "https://map.naver.com/v5/search/" + URLEncoder.encode(keyword, "UTF-8");
             driver.get(url);
-            Thread.sleep(3000); // 초기 로딩 대기
+            Thread.sleep(3000);
 
-            // searchIframe 감지될 때까지 대기
+            // 2. searchIframe 진입
             while (!(Boolean) js.executeScript("return document.querySelector('iframe#searchIframe') !== null;")) {
                 Thread.sleep(500);
             }
             driver.switchTo().frame("searchIframe");
 
-            // 가게 이름 요소들 가져오기 (텍스트 기반 안전한 셀렉터)
-            List<WebElement> shopLinks = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
-                    By.cssSelector("div.place_bluelink>.TYaxT, div.place_bluelink>span.YwYLL")));
+            // 3. 첫 번째 검색 결과 중 "가게 이름" 요소 클릭
+            WebElement titleElement = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.cssSelector("a.place_bluelink")));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", titleElement);
 
-            if (shopLinks.isEmpty()) {
-                System.out.println("가게 항목 없음");
-                return result;
-            }
-
-            // 첫 번째 가게 클릭
-            WebElement listContainer = driver.findElement(By.xpath("//*[@id=\"_pcmap_list_scroll_container\"]/ul"));
-            List<WebElement> links = listContainer.findElements(By.tagName("a"));
-
-            if (links.isEmpty()) {
-                System.out.println("가게 리스트 없음");
-                return null;
-            }
-
-            // 첫 번째 가게 클릭 시도 (JavaScript로 강제)
-            WebElement shop = shopLinks.get(0);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", shop);
-
-            // 클릭 이후 URL 변화 기다리기
-            while (!driver.getCurrentUrl().contains("/place/")) {
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", shop);
-                Thread.sleep(5000); // 재시도 대기
-            }
-
-            // 상세페이지 진입 성공 이후
-            String currentUrl = driver.getCurrentUrl();
-
-            // placePath 파라미터를 메뉴로 교체 메뉴 진입
-            if (currentUrl.contains("placePath=")) {
-                String menuUrl = currentUrl.replaceAll("placePath=[^&]*", "placePath=/menu");
-                driver.get(menuUrl);
-                Thread.sleep(1500); // 메뉴탭 로딩 대기
-            } else {
-                System.out.println("상세 페이지 URL에 placePath가 없어 메뉴탭 접근 불가");
-                return result;
-            }
-
-            // entryIframe 전환까지 안전 처리
+            // 4. 상세 패널 iframe(entryIframe) 진입 시도
+            int attempt = 0;
             while (true) {
                 try {
-                    driver.switchTo().defaultContent(); // 원래 프레임으로
+                    driver.switchTo().defaultContent();
                     wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(
                             By.cssSelector("iframe#entryIframe")));
-                    break; // 전환 성공하면 탈출
+                    break;
                 } catch (NoSuchFrameException e) {
-                    Thread.sleep(500); // 재시도 대기
+                    Thread.sleep(500);
+                    if (++attempt >= 3) {
+                        System.out.println("entryIframe 전환 실패 (상세페이지)");
+                        return result;
+                    }
                 }
             }
 
-            // 메뉴 크롤링
-            System.out.println("메뉴 크롤링 시작");
+            // 5. 메뉴 탭 클릭
+            try {
+                WebElement menuTab = wait.until(ExpectedConditions.presenceOfElementLocated(
+                        By.xpath("//a[contains(@href, 'menu') or contains(text(), '메뉴')]")));
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", menuTab);
+                Thread.sleep(1500);
+            } catch (Exception e) {
+                System.out.println("메뉴 탭 클릭 실패");
+                return result;
+            }
 
+            // 6. 다시 entryIframe 진입 (메뉴 탭 전환 후)
+            attempt = 0;
+            while (true) {
+                try {
+                    driver.switchTo().defaultContent();
+                    wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(
+                            By.cssSelector("iframe#entryIframe")));
+                    break;
+                } catch (NoSuchFrameException e) {
+                    Thread.sleep(500);
+                    if (++attempt >= 3) {
+                        System.out.println("entryIframe 전환 실패 (메뉴탭 클릭 후)");
+                        return result;
+                    }
+                }
+            }
+
+            // 7. 메뉴 목록 크롤링
             List<WebElement> menuElements = driver.findElements(By.cssSelector("div.place_section_content ul li"));
-            System.out.println("메뉴 요소 수: " + menuElements.size());
-
             for (WebElement menu : menuElements) {
                 try {
-                    String name = "";
-                    String description = "";
-                    String price = "";
+                    String name = getTextOrEmpty(menu, ".lPzHi");
+                    String description = getTextOrEmpty(menu, ".kPogF");
+                    String price = getTextOrEmpty(menu, ".GXS1X");
                     String imageUrl = "";
 
-                    // 메뉴명
-                    try {
-                        name = menu.findElement(By.className("lPzHi")).getText();
-                    } catch (NoSuchElementException ignore) {
-                        System.out.println("메뉴명 없음");
-                    }
-
-                    // 메뉴 설명
-                    try {
-                        description = menu.findElement(By.className("kPogF")).getText();
-                    } catch (NoSuchElementException ignore) {
-                    }
-
-                    // 메뉴 가격
-                    try {
-                        price = menu.findElement(By.className("GXS1X")).getText();
-                    } catch (NoSuchElementException ignore) {
-                    }
-
-                    // 이미지 URL
                     try {
                         WebElement img = menu.findElement(By.cssSelector(".place_thumb img"));
                         imageUrl = img.getAttribute("src");
@@ -136,11 +109,9 @@ public class NaverMenuCrawler {
                     }
 
                     if (!name.isEmpty()) {
-                        result.add(new MenuDto(name, price, imageUrl, description)); // description 포함 DTO 필요
+                        result.add(new MenuDto(name, price, imageUrl, description));
                     }
-
-                } catch (Exception e) {
-                    continue;
+                } catch (Exception ignore) {
                 }
             }
 
@@ -151,5 +122,22 @@ public class NaverMenuCrawler {
         }
 
         return result;
+    }
+
+    private String getTextOrEmpty(WebElement element, String cssSelector) {
+        try {
+            return element.findElement(By.cssSelector(cssSelector)).getText();
+        } catch (NoSuchElementException e) {
+            return "";
+        }
+    }
+
+    // 👇 이 메서드는 dto.getAddress()에서 "구 동"만 추출
+    private String extractGuAndDong(String address) {
+        String[] parts = address.split(" ");
+        if (parts.length >= 3) {
+            return parts[1] + " " + parts[2]; // 예: 유성구 관평동
+        }
+        return address; // 예외적으로 파싱 안 되면 전체 주소 사용
     }
 }

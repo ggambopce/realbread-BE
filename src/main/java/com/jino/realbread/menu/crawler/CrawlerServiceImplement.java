@@ -26,7 +26,7 @@ public class CrawlerServiceImplement implements CrawlerService {
         List<BakeryCrawlDto> bakeryList = bakeryRepository.findAllForCrawling(); // name, address 포함
 
         int crawlCount = 0;
-        final int MAX_CRAWL = 5;
+        final int MAX_CRAWL = 3;
 
         for (BakeryCrawlDto bakery : bakeryList) {
             if (crawlCount >= MAX_CRAWL) {
@@ -34,19 +34,21 @@ public class CrawlerServiceImplement implements CrawlerService {
                 break;
             }
 
+            crawlCount++; // 저장 성공 시만 증가
+
             // 이미 메뉴가 있는 빵집은 스킵
             boolean exists = menuRepository.existsByBakeryId(bakery.getBakeryId());
             if (exists) {
-                System.out.println("이미 메뉴 있음 → 스킵: " + bakery.getName());
+                System.out.println("이미 메뉴 있음 → 스킵: " + bakery.getTitle());
                 continue;
             }
 
             try {
-                System.out.println("크롤링 시작: " + bakery.getName());
+                System.out.println("크롤링 시작: " + bakery.getTitle());
                 List<MenuDto> menuList = naverMenuCrawler.crawl(bakery);
 
                 if (menuList.isEmpty()) {
-                    System.out.println("메뉴 없음: " + bakery.getName());
+                    System.out.println("메뉴 없음: " + bakery.getTitle());
                     continue;
                 }
 
@@ -62,11 +64,11 @@ public class CrawlerServiceImplement implements CrawlerService {
                         .toList();
 
                 menuRepository.saveAll(menuEntities);
-                crawlCount++; // 저장 성공 시만 증가
-                System.out.println("저장 완료: " + bakery.getName() + " (" + menuEntities.size() + "개)");
+
+                System.out.println("저장 완료: " + bakery.getTitle() + " (" + menuEntities.size() + "개)");
 
             } catch (Exception e) {
-                System.out.println("크롤링 실패: " + bakery.getName());
+                System.out.println("크롤링 실패: " + bakery.getTitle());
                 e.printStackTrace();
             }
         }

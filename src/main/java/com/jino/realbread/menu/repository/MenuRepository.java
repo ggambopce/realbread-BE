@@ -1,17 +1,12 @@
 package com.jino.realbread.menu.repository;
 
 import com.jino.realbread.menu.Menu;
-import com.jino.realbread.menu.crawler.BakeryCrawlDto;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
-    boolean existsByBakeryId(Integer bakeryId);
+    boolean existsByBakeryId(Long bakeryId);
 
 }

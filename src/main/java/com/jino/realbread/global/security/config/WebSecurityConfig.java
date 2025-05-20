@@ -43,7 +43,8 @@ public class WebSecurityConfig {
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("/api/edu-bot/counsel", "/api/promptchat", "/api/chat",
-                                                                "/api/test", "/api/test/client-chat")
+                                                                "/api/test", "/api/test/client-chat",
+                                                                "/api/crawler/menus")
                                                 .permitAll()
                                                 .requestMatchers("/", "/api/auth/**", "/api/search/**", "/oauth2/**",
                                                                 "/api/bakery/**", "/api/bakery/search-list/**",

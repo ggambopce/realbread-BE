@@ -129,4 +129,6 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
                         ORDER BY RAND()
                         """, nativeQuery = true)
         List<BakeryCrawlDto> findAllForCrawling();
+
+        List<Long> findAllBakeryIds();
 }

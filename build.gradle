@@ -65,6 +65,10 @@ dependencies {
 	//STT,TTS CLOUD API
 	implementation 'com.google.cloud:google-cloud-speech:4.28.0'
 	implementation 'com.google.cloud:google-cloud-texttospeech:2.61.0'
+
+	// Redis 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.apache.commons:commons-pool2' // 커넥션 풀
 }
 
 

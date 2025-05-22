@@ -44,8 +44,8 @@ public class eduBotController {
 
     @PostMapping("/counsel/text")
     public ResponseEntity<ChatEmotionResponse> chatWithBakeryBot(@RequestBody ChatTextRequestDto request) {
-        String message = request.getMessage();
-        ChatEmotionResponse response = promptChatService.counselTextResponse(message);
+        String chatQuestion = request.getChatQuestion();
+        ChatEmotionResponse response = promptChatService.counselTextResponse(chatQuestion);
         return ResponseEntity.ok(response);
     }
 

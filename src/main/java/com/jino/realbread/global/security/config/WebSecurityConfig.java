@@ -42,7 +42,8 @@ public class WebSecurityConfig {
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/api/edu-bot/counsel", "/api/promptchat", "/api/chat",
+                                                .requestMatchers("/api/edu-bot/counsel/**", "/api/promptchat",
+                                                                "/api/chat",
                                                                 "/api/test", "/api/test/client-chat",
                                                                 "/api/crawler/menus")
                                                 .permitAll()
@@ -50,7 +51,8 @@ public class WebSecurityConfig {
                                                                 "/api/bakery/**", "/api/bakery/search-list/**",
                                                                 "/file/**")
                                                 .permitAll()
-                                                .requestMatchers(HttpMethod.GET, "/api/bakery/**", "/api/user/*")
+                                                .requestMatchers(HttpMethod.GET, "/api/bakery/**", "/api/user/*",
+                                                                "/api/search/**")
                                                 .permitAll()
                                                 .requestMatchers("/api/admin/edubot/**").hasRole("ADMIN")
                                                 .anyRequest().authenticated())

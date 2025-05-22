@@ -18,10 +18,10 @@ public class MenuListItem {
     private String imageUrl;
 
     public MenuListItem(BakeryListViewEntity entity) {
-        this.menuNumber = entity.getMenuId();
+        this.menuNumber = entity.getMenuNumber();
         this.menuName = entity.getMenuName();
-        this.price = entity.getMenuPrice();
-        this.description = entity.getMenuDescription();
-        this.imageUrl = entity.getMenuImageUrl();
+        this.price = entity.getPrice();
+        this.description = entity.getDescription();
+        this.imageUrl = entity.getImageUrl();
     }
 }

@@ -1,4 +1,4 @@
-package com.jino.realbread.domain.eduBot.dto;
+package com.jino.realbread.domain.eduBot.dto.response;
 
 import com.jino.realbread.domain.eduBot.entity.Emotion;
 

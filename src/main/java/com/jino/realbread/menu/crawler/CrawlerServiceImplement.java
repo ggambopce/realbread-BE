@@ -1,5 +1,6 @@
 package com.jino.realbread.menu.crawler;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class CrawlerServiceImplement implements CrawlerService {
     @Transactional
     public void crawlAllMenus() {
         List<BakeryCrawlDto> bakeryList = bakeryRepository.findAllForCrawling(); // name, address 포함
+
+        // 랜덤 순서로 섞기
+        Collections.shuffle(bakeryList);
 
         int crawlCount = 0;
         final int MAX_CRAWL = 20;

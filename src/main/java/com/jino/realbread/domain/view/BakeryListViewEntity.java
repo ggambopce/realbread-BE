@@ -24,49 +24,43 @@ public class BakeryListViewEntity {
 
     // Bakery 정보
     @Column(name = "bakery_id")
-    private Integer bakeryId;
+    private Integer bakeryNumber;
 
     @Column(name = "bakery_title")
-    private String bakeryTitle;
-
-    @Column(name = "bakery_category")
-    private String bakeryCategory;
-
-    @Column(name = "bakery_address")
-    private String bakeryAddress;
+    private String title;
 
     @Column(name = "bakery_road_address")
-    private String bakeryRoadAddress;
+    private String roadAddress;
 
     @Column(name = "bakery_link")
-    private String bakeryLink;
+    private String link;
 
     @Column(name = "bakery_mapx")
-    private String bakeryMapx;
+    private String mapx;
 
     @Column(name = "bakery_mapy")
-    private String bakeryMapy;
+    private String mapy;
 
     @Column(name = "bakery_favorite_count")
-    private int bakeryFavoriteCount;
+    private int favoriteCount;
 
     @Column(name = "bakery_comment_count")
-    private int bakeryCommentCount;
+    private int commentCount;
 
     // Menu 정보
     @Column(name = "menu_id")
-    private Integer menuId;
+    private Integer menuNumber;
 
     @Column(name = "menu_name")
     private String menuName;
 
     @Column(name = "menu_price")
-    private String menuPrice;
+    private String price;
 
     @Column(name = "menu_description", length = 2000)
-    private String menuDescription;
+    private String description;
 
     @Column(name = "menu_image_url")
-    private String menuImageUrl;
+    private String imageUrl;
 
 }

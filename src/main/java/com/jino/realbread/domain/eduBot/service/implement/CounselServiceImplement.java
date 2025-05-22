@@ -1,8 +1,8 @@
 package com.jino.realbread.domain.eduBot.service.implement;
 
 import com.jino.realbread.domain.eduBot.chatgpt.PromptChatService;
-import com.jino.realbread.domain.eduBot.dto.ChatEmotionAudioResponse;
-import com.jino.realbread.domain.eduBot.dto.ChatEmotionResponse;
+import com.jino.realbread.domain.eduBot.dto.response.ChatEmotionAudioResponse;
+import com.jino.realbread.domain.eduBot.dto.response.ChatEmotionResponse;
 import com.jino.realbread.domain.eduBot.entity.Emotion;
 import com.jino.realbread.domain.eduBot.service.CounselService;
 import com.jino.realbread.domain.eduBot.stt.SpeechToTextService;

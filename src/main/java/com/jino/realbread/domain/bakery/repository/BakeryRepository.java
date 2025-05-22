@@ -83,7 +83,9 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
                                 m.id AS menuNumber,
                                 m.image_url AS imageUrl,
                                 ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY m.id) AS rn
-                                FROM bakery b
+                                FROM (
+                                        SELECT * FROM bakery ORDER BY comment_count DESC LIMIT 100
+                                ) b
                                 LEFT JOIN menu m ON b.id = m.bakery_number
                         ) ranked
                         WHERE rn <= 4
@@ -106,7 +108,9 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
                                 m.id AS menuNumber,
                                 m.image_url AS imageUrl,
                                 ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY m.id) AS rn
-                                FROM bakery b
+                                FROM (
+                                        SELECT * FROM bakery ORDER BY favorite_count DESC LIMIT 100
+                                ) b
                                 LEFT JOIN menu m ON b.id = m.bakery_number
                         ) ranked
                         WHERE rn <= 4
@@ -116,10 +120,13 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
 
         @Query(value = """
                         SELECT
-                        b.id AS bakeryId,
-                        b.title AS title,
-                        b.address AS address
+                                b.id AS bakeryId,
+                                b.title AS title,
+                                b.address AS address
                         FROM bakery b
+                        LEFT JOIN menu m ON b.id = m.bakery_number
+                        WHERE m.id IS NULL
+                        ORDER BY RAND()
                         """, nativeQuery = true)
         List<BakeryCrawlDto> findAllForCrawling();
 }

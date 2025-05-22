@@ -2,7 +2,7 @@ package com.jino.realbread.domain.eduBot.chatgpt;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jino.realbread.domain.eduBot.dto.ChatEmotionResponse;
+import com.jino.realbread.domain.eduBot.dto.response.ChatEmotionResponse;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.messages.UserMessage;

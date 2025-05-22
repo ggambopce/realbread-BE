@@ -18,42 +18,38 @@ import lombok.NoArgsConstructor;
 public class BakeryListItem {
 
     // Bakery 정보
-    private Integer bakeryId;
-    private String bakeryTitle;
-    private String bakeryCategory;
-    private String bakeryAddress;
-    private String bakeryRoadAddress;
-    private String bakeryLink;
-    private String bakeryMapx;
-    private String bakeryMapy;
-    private int bakeryFavoriteCount;
-    private int bakeryCommentCount;
+    private Integer bakeryNumber;
+    private String title;
+    private String roadAddress;
+    private String link;
+    private String mapx;
+    private String mapy;
+    private int fvoriteCount;
+    private int commentCount;
 
     // 메뉴 리스트(상세, 검색 모두 사용)
     private List<MenuListItem> menuList = new ArrayList<>();
 
     // Bakery 정보만 초기화하는 생성자
     public BakeryListItem(BakeryListViewEntity entity) {
-        this.bakeryId = entity.getBakeryId();
-        this.bakeryTitle = entity.getBakeryTitle();
-        this.bakeryCategory = entity.getBakeryCategory();
-        this.bakeryAddress = entity.getBakeryAddress();
-        this.bakeryRoadAddress = entity.getBakeryRoadAddress();
-        this.bakeryLink = entity.getBakeryLink();
-        this.bakeryMapx = entity.getBakeryMapx();
-        this.bakeryMapy = entity.getBakeryMapy();
-        this.bakeryFavoriteCount = entity.getBakeryFavoriteCount();
-        this.bakeryCommentCount = entity.getBakeryCommentCount();
+        this.bakeryNumber = entity.getBakeryNumber();
+        this.title = entity.getTitle();
+        this.roadAddress = entity.getRoadAddress();
+        this.link = entity.getLink();
+        this.mapx = entity.getMapx();
+        this.mapy = entity.getMapy();
+        this.fvoriteCount = entity.getFavoriteCount();
+        this.commentCount = entity.getCommentCount();
     }
 
     // 메뉴 추가 메서드
     public void addMenu(BakeryListViewEntity entity) {
         this.menuList.add(new MenuListItem(
-                entity.getMenuId(),
+                entity.getMenuNumber(),
                 entity.getMenuName(),
-                entity.getMenuPrice(),
-                entity.getMenuDescription(),
-                entity.getMenuImageUrl()));
+                entity.getPrice(),
+                entity.getDescription(),
+                entity.getImageUrl()));
     }
 
     // Bakery ID 기준으로 중복 제거 및 메뉴 통합
@@ -61,7 +57,7 @@ public class BakeryListItem {
         Map<Integer, BakeryListItem> bakeryMap = new LinkedHashMap<>();
 
         for (BakeryListViewEntity entity : entities) {
-            Integer bakeryId = entity.getBakeryId();
+            Integer bakeryId = entity.getBakeryNumber();
             BakeryListItem item = bakeryMap.get(bakeryId);
 
             if (item == null) {

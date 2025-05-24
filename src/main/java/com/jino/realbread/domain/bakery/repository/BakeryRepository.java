@@ -130,5 +130,6 @@ public interface BakeryRepository extends JpaRepository<Bakery, Integer> {
                         """, nativeQuery = true)
         List<BakeryCrawlDto> findAllForCrawling();
 
+        @Query(value = "SELECT id FROM bakery", nativeQuery = true)
         List<Long> findAllBakeryIds();
 }

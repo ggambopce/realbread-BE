@@ -18,10 +18,13 @@ import com.jino.realbread.domain.favorite.repository.FavoriteRepository;
 import com.jino.realbread.domain.favorite.repository.resultSet.GetFavoriteListResultSet;
 import com.jino.realbread.domain.search.entity.SearchLogEntity;
 import com.jino.realbread.domain.search.repository.SearchLogRepository;
+import com.jino.realbread.domain.statistics.service.VisitStatService;
 import com.jino.realbread.domain.user.repository.UserRepository;
 import com.jino.realbread.domain.view.BakeryListViewEntity;
 import com.jino.realbread.domain.view.repository.BakeryListViewRepository;
 import com.jino.realbread.global.dto.response.ResponseDto;
+
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,9 +41,10 @@ public class BakeryServiceImplement implements BakeryService {
     private final BakeryListViewRepository bakeryListViewRepository;
     private final FavoriteRepository favoriteRepository;
     private final UserRepository userRepository;
+    private final VisitStatService visitStatService;
 
     @Override
-    public ResponseEntity<? super GetBakeryResponseDto> getBakery(Integer bakeryNumber) {
+    public ResponseEntity<? super GetBakeryResponseDto> getBakery(Integer bakeryNumber, HttpServletRequest request) {
 
         List<GetBakeryResultSet> resultSet;
 
@@ -48,6 +52,8 @@ public class BakeryServiceImplement implements BakeryService {
             resultSet = bakeryRepository.getBakery(bakeryNumber);
             if (resultSet.isEmpty())
                 return GetBakeryResponseDto.noExistBakery();
+
+            visitStatService.recordVisit(bakeryNumber, request);
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -99,13 +105,13 @@ public class BakeryServiceImplement implements BakeryService {
     }
 
     @Override
-    public ResponseEntity<? super GetSearchBakeryListResponseDto> getSearchBakeryList(String searchWord,
+    public ResponseEntity<? super GetBakeryMainListResponseDto> getSearchBakeryList(String searchWord,
             String preSearchWord) {
-        List<BakeryListViewEntity> bakeryListViewEntities = new ArrayList<>();
+        List<GetBakeryMainListItemResultSet> resultSets = new ArrayList<>();
 
         try {
 
-            bakeryListViewEntities = bakeryListViewRepository
+            resultSets = bakeryListViewRepository
                     .getSearchByBakeryTitleOrBakeryAddress(
                             searchWord);
 
@@ -122,7 +128,7 @@ public class BakeryServiceImplement implements BakeryService {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
-        return GetSearchBakeryListResponseDto.success(bakeryListViewEntities);
+        return GetBakeryMainListResponseDto.success(resultSets);
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.jino.realbread.domain.bakery.repository.BakeryRepository;
-import com.jino.realbread.domain.statistics.dto.VisitStatResponseDto;
+import com.jino.realbread.domain.statistics.dto.GetVisitStatResponseDto;
 import com.jino.realbread.domain.statistics.entity.VisitStat;
 import com.jino.realbread.domain.statistics.repository.VisitStatRepository;
 
@@ -46,6 +46,14 @@ public class VisitStatBatchScheduler {
                 visitStatRepository.save(stat);
             }
         }
+    }
+
+    // 실시간 오늘 고유 방문자수
+    public Long getTodayUniqueVisitCount(Long bakeryId) {
+        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String key = "visit:uv:" + today + ":" + bakeryId;
+        Long count = redisTemplate.opsForSet().size(key);
+        return count != null ? count : 0L;
     }
 
 }

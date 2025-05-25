@@ -23,6 +23,7 @@ import com.jino.realbread.domain.user.repository.UserRepository;
 import com.jino.realbread.domain.view.BakeryListViewEntity;
 import com.jino.realbread.domain.view.repository.BakeryListViewRepository;
 import com.jino.realbread.global.dto.response.ResponseDto;
+import com.jino.realbread.global.security.auth.PrincipalDetails;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -152,9 +153,12 @@ public class BakeryServiceImplement implements BakeryService {
     }
 
     @Override
-    public ResponseEntity<? super PutFavoriteResponseDto> putFavorite(Integer bakeryNumber, Integer userId) {
+    public ResponseEntity<? super PutFavoriteResponseDto> putFavorite(Integer bakeryNumber,
+            PrincipalDetails principalDetails) {
 
         try {
+
+            Long userId = principalDetails.getUserEntity().getUserId();
 
             boolean existedUser = userRepository.existsByUserId(userId);
             if (!existedUser)

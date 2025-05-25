@@ -15,9 +15,9 @@ import lombok.Setter;
 public class FavoritePK implements Serializable {
 
     @Column(name = "user_id")
-    private int userId;
+    private Long userId;
 
     @Column(name = "bakery_number")
-    private int bakeryNumber;
+    private Integer bakeryNumber;
 
 }

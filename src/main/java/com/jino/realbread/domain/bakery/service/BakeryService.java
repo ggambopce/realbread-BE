@@ -3,9 +3,9 @@ package com.jino.realbread.domain.bakery.service;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMainListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
-import com.jino.realbread.domain.bakery.dto.response.GetSearchBakeryListResponseDto;
 import com.jino.realbread.domain.favorite.dto.response.GetFavoriteListResponseDto;
 import com.jino.realbread.domain.favorite.dto.response.PutFavoriteResponseDto;
+import com.jino.realbread.global.security.auth.PrincipalDetails;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -23,5 +23,5 @@ public interface BakeryService {
 
     ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(Integer bakeryNumber);
 
-    ResponseEntity<? super PutFavoriteResponseDto> putFavorite(Integer bakeryNumber, Integer userId);
+    ResponseEntity<? super PutFavoriteResponseDto> putFavorite(Integer bakeryNumber, PrincipalDetails principalDetails);
 }

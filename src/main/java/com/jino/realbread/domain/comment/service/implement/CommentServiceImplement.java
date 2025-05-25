@@ -11,6 +11,7 @@ import com.jino.realbread.domain.comment.repository.resultSet.GetCommentListResu
 import com.jino.realbread.domain.comment.service.CommentService;
 import com.jino.realbread.domain.user.repository.UserRepository;
 import com.jino.realbread.global.dto.response.ResponseDto;
+import com.jino.realbread.global.security.auth.PrincipalDetails;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,8 +31,9 @@ public class CommentServiceImplement implements CommentService {
 
     @Override
     public ResponseEntity<? super PostCommentResponseDto> postComment(PostCommentRequestDto dto, Integer bakeryNumber,
-            Integer userId) {
+            PrincipalDetails principalDetails) {
         try {
+            Long userId = principalDetails.getUserEntity().getUserId();
 
             Bakery bakeryEntity = bakeryRepository.findByBakeryId(bakeryNumber);
             if (bakeryEntity == null)

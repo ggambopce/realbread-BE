@@ -3,10 +3,10 @@ package com.jino.realbread.domain.bakery.controller;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMainListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryMarkerListResponseDto;
 import com.jino.realbread.domain.bakery.dto.response.GetBakeryResponseDto;
-import com.jino.realbread.domain.bakery.dto.response.GetSearchBakeryListResponseDto;
 import com.jino.realbread.domain.bakery.service.BakeryService;
 import com.jino.realbread.domain.favorite.dto.response.GetFavoriteListResponseDto;
 import com.jino.realbread.domain.favorite.dto.response.PutFavoriteResponseDto;
+import com.jino.realbread.global.security.auth.PrincipalDetails;
 import com.jino.realbread.naverapi.NaverSearchService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,8 +51,9 @@ public class BakeryController {
 
     @PutMapping("/{boardNumber}/favorite")
     public ResponseEntity<? super PutFavoriteResponseDto> putFavorite(@PathVariable("boardNumber") Integer boardNumber,
-            @AuthenticationPrincipal Integer userId) {
-        ResponseEntity<? super PutFavoriteResponseDto> response = bakeryService.putFavorite(boardNumber, userId);
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        ResponseEntity<? super PutFavoriteResponseDto> response = bakeryService.putFavorite(boardNumber,
+                principalDetails);
         return response;
     }
 

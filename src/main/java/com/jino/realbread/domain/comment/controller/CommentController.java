@@ -13,6 +13,7 @@ import com.jino.realbread.domain.comment.dto.request.PostCommentRequestDto;
 import com.jino.realbread.domain.comment.dto.response.GetCommentListResponseDto;
 import com.jino.realbread.domain.comment.dto.response.PostCommentResponseDto;
 import com.jino.realbread.domain.comment.service.CommentService;
+import com.jino.realbread.global.security.auth.PrincipalDetails;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,9 @@ public class CommentController {
     @PostMapping("/{bakeryNumber}/comment")
     public ResponseEntity<? super PostCommentResponseDto> postComment(
             @RequestBody @Valid PostCommentRequestDto requestDto, @PathVariable("bakeryNumber") Integer bakeryNumber,
-            @AuthenticationPrincipal Integer userId) {
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         ResponseEntity<? super PostCommentResponseDto> response = commentService.postComment(requestDto, bakeryNumber,
-                userId);
+                principalDetails);
         return response;
     }
 

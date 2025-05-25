@@ -19,14 +19,14 @@ public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int commentNumber;
+    private Integer commentNumber;
     private String choiceMenu;
     private String content;
     private String writeDatetime;
-    private Integer userId;
+    private Long userId;
     private Integer bakeryNumber;
 
-    public CommentEntity(PostCommentRequestDto dto, Integer bakeryNumber, Integer userId) {
+    public CommentEntity(PostCommentRequestDto dto, Integer bakeryNumber, Long userId) {
 
         Date now = Date.from(Instant.now());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");

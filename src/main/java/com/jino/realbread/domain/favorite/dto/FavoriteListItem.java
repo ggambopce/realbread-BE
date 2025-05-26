@@ -19,7 +19,7 @@ public class FavoriteListItem {
     private String profileImage;
 
     public FavoriteListItem(GetFavoriteListResultSet resultSet) {
-        this.email = resultSet.getUserId();
+        this.email = resultSet.getEmail();
         this.nickname = resultSet.getNickname();
         this.profileImage = resultSet.getProfileImage();
     }

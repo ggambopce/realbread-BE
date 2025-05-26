@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.jino.realbread.domain.favorite.entity.FavoriteEntity;
@@ -16,7 +17,7 @@ public interface FavoriteRepository extends JpaRepository<FavoriteEntity, Favori
     FavoriteEntity findByBakeryNumberAndUserId(Integer bakeryNumber, Long userId);
 
     @Query(value = "SELECT " +
-            "U.id AS userId, " +
+            "U.email AS email, " +
             "U.nickname AS nickname, " +
             "U.profile_image AS profileImage " +
             "FROM favorite AS F " +

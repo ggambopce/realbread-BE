@@ -59,7 +59,7 @@ public class WebSecurityConfig {
                                 .oauth2Login(oauth2 -> oauth2
                                                 .authorizationEndpoint(endponit -> endponit.baseUri("/api/auth/oauth2"))
                                                 .redirectionEndpoint(endpoint -> endpoint
-                                                                .baseUri("/login/oauth2/code/kakao"))
+                                                                .baseUri("/realbread/login/oauth2/code/kakao"))
                                                 .userInfoEndpoint(endpoint -> endpoint.userService(oAuth2UserService))
                                                 .successHandler(oAuth2SuccessHandler))
                                 .exceptionHandling(exception -> exception

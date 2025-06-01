@@ -27,7 +27,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String email = oAuth2User.getName();
         String token = jwtProvider.create(email);
 
-        response.sendRedirect("https://jinorandb.com/realbread/auth/oauth-response/" + token + "/3600");
+        response.sendRedirect("https://realbread.jinorandb.com/auth/oauth-response/" + token + "/3600");
     }
 
 }
